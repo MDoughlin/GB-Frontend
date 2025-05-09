@@ -45,7 +45,4 @@ const styles = StyleSheet.create({
   text: {
     marginLeft: 15,
   },
-  // activeCheckBox: {
-  //   // backgroundColor: "#06b6d4" + "11",
-  // },
 });

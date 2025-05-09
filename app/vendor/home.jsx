@@ -4,10 +4,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  SafeAreaView,
 } from "react-native";
 
 const VendorHomeScreen = () => {
@@ -37,37 +37,41 @@ const VendorHomeScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      {vendors.length > 0 ? (
-        <>
-          <FlatList
-            data={vendors}
-            keyExtractor={(item) => item.id}
-            renderItem={renderVendor}
-          />
-          <TouchableOpacity
-          // style={styles.circle}
-          // onPress={() => router.push("/vendor/dashboard")}
-          >
-            {/* <Text style={styles.circleText}>{dummyVendor.name.charAt(0)}</Text> */}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        {vendors.length > 0 ? (
+          <>
+            <Text>CTA</Text>
+            <FlatList
+              data={vendors}
+              keyExtractor={(item) => item.id}
+              renderItem={renderVendor}
+              horizontal={true}
+              contentContainerStyle={{ gap: 12 }}
+            />
+            <TouchableOpacity>
+              <MaterialCommunityIcons
+                style={styles.addButton}
+                name="plus-circle-outline"
+                size={40}
+                onPress={() => router.push("/vendor/sign-up")}
+              />
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <Text>CTA</Text>
+            <Text>Let's Add Your Establishment</Text>
             <MaterialCommunityIcons
-              style={styles.addButton}
+              style={styles.addButtonTwo}
               name="plus-circle-outline"
               size={40}
               onPress={() => router.push("/vendor/sign-up")}
             />
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          <Text>Welcome to GB!</Text>
-          <Button
-            title="Go to Sign Up"
-            onPress={() => router.push("/vendor/sign-up")}
-          />
-        </>
-      )}
-    </View>
+          </>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -83,6 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "row",
   },
   circleText: {
     color: "white",
@@ -90,6 +95,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   addButton: {
+    position: "absolute",
+    right: 20,
+    botton: 30,
+    borderRadius: 50,
+  },
+  addButtonTwo: {
     position: "absolute",
     left: 275,
     top: 650,

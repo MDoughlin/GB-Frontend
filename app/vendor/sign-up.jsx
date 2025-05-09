@@ -15,19 +15,42 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const VendorSignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [step1Data, setStep1Data] = useState({ nameOfBusiness: "" });
-  const [step2Data, setStep2Data] = useState({ phoneNumber: "" });
-  const [step3Data, setStep3Data] = useState({
-    Sunday: "",
-    Monday: "",
-    Tuesday: "",
-    Wednesday: "",
-    Thursday: "",
-    Friday: "",
-    Saturday: "",
+  const [formData, setFormData] = useState({
+    business_name: "",
+    phone_number: "",
+    business_hours: {
+      Sunday: "",
+      Monday: "",
+      Tuesday: "",
+      Wednesday: "",
+      Thursday: "",
+      Friday: "",
+      Saturday: "",
+    },
+    instagram_url: "",
+    facebook_url: "",
+    location: "",
+    payment_method: [],
+    order_intstructions: "",
+    cuisine_type: [],
   });
-  const [payment, setPayment] = useState([]);
-  const [cuisine, setCuisine] = useState([]);
+
+  const formatPhoneNumber = (text) => {
+    const cleaned = text.replace(/\D/g, "");
+    const length = cleaned.length;
+
+    if (length < 4) return cleaned;
+    if (length < 7) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
+      6,
+      10
+    )}`;
+  };
+
+  const handlePhoneNumberFormat = (text) => {
+    const formatted = formatPhoneNumber(text);
+    setFormData((prev) => ({ ...prev, phone_number: formatted }));
+  };
 
   const steps = [
     {
@@ -38,9 +61,9 @@ const VendorSignUp = () => {
           <TextInput
             style={styles.input}
             placeholder="Name of Business"
-            value={step1Data.nameOfBusiness}
+            value={formData.business_name}
             onChangeText={(text) =>
-              setStep1Data({ ...step1Data, nameOfBusiness: text })
+              setFormData((prev) => ({ ...prev, business_name: text }))
             }
           />
         </View>
@@ -55,10 +78,8 @@ const VendorSignUp = () => {
             style={styles.input}
             placeholder="Phone Number"
             keyboardType="phone-pad"
-            value={step2Data.phoneNumber}
-            onChangeText={(text) =>
-              setStep2Data({ ...step2Data, phoneNumber: text })
-            }
+            value={formData.phone_number}
+            onChangeText={handlePhoneNumberFormat}
           />
         </View>
       ),
@@ -70,16 +91,22 @@ const VendorSignUp = () => {
         <ScrollView>
           <View>
             <Text style={styles.heading}>Business Hours</Text>
-            {Object.keys(step3Data).map((day) => (
+            {Object.keys(formData.business_hours).map((day) => (
               <View key={day}>
                 <Text>{day}:</Text>
                 <TextInput
                   key={day}
                   style={styles.businessInput}
                   placeholder={`${day} Hours`}
-                  value={step3Data[day]}
+                  value={formData.business_hours[day]}
                   onChangeText={(text) =>
-                    setStep3Data({ ...step3Data, [day]: text })
+                    setFormData((prev) => ({
+                      ...prev,
+                      business_hours: {
+                        ...prev.business_hours,
+                        [day]: text,
+                      },
+                    }))
                   }
                 />
               </View>
@@ -96,12 +123,28 @@ const VendorSignUp = () => {
           <Text style={styles.inputLabel}>Instagram Handle:</Text>
           <View style={styles.inputContainer}>
             <Icon style={styles.icon} name="logo-instagram" />
-            <TextInput style={styles.socialInput}>www.instagram.com/</TextInput>
+            <Text style={styles.staticPrefix}>www.instagram.com/</Text>
+            <TextInput
+              style={styles.socialInput}
+              value={formData.instagram_url}
+              onChangeText={(text) =>
+                setFormData((prev) => ({ ...prev, instagram_url: text }))
+              }
+              placeholder="yourhandle"
+            />
           </View>
           <Text style={styles.inputLabel}>Facebook:</Text>
           <View style={styles.inputContainer}>
             <Icon style={styles.icon} name="logo-facebook" />
-            <TextInput style={styles.socialInput}>www.facebook.com/</TextInput>
+            <Text style={styles.staticPrefix}>www.facebook.com/</Text>
+            <TextInput
+              style={styles.socialInput}
+              value={formData.facebook_url}
+              onChangeText={(text) =>
+                setFormData((prev) => ({ ...prev, facebook_url: text }))
+              }
+              placeholder="username"
+            ></TextInput>
           </View>
         </View>
       ),
@@ -139,8 +182,10 @@ const VendorSignUp = () => {
               { label: "FirstPay", value: "1st Pay" },
               { label: "CIBC", value: "CIBC Transfer" },
             ]}
-            checkedValues={payment}
-            onChange={setPayment}
+            checkedValues={formData.payment_method}
+            onChange={(updatedArray) =>
+              setFormData((prev) => ({ ...prev, payment_method: updatedArray }))
+            }
           />
         </View>
       ),
@@ -151,7 +196,13 @@ const VendorSignUp = () => {
         <View style={styles.stepContent}>
           <Text style={styles.heading}>Ordering</Text>
           <Text>How do patrons order?</Text>
-          <TextInput style={styles.orderInput} />
+          <TextInput
+            style={styles.orderInput}
+            value={formData.order_intstructions}
+            onChangeText={(text) =>
+              setFormData((prev) => ({ ...prev, order_intstructions: text }))
+            }
+          />
         </View>
       ),
     },
@@ -171,19 +222,41 @@ const VendorSignUp = () => {
               { label: "Sweets and Treats", value: "Sweets and Treats" },
               { label: "Drinks", value: "Drinks" },
             ]}
-            checkedValues={cuisine}
-            onChange={setCuisine}
+            checkedValues={formData.cuisine_type}
+            onChange={(updatedArray) =>
+              setFormData((prev) => ({ ...prev, cuisine_type: updatedArray }))
+            }
           />
         </View>
       ),
     },
   ];
 
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/vendors", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok)
+        throw new Error(data.message || "Failed to create vendor");
+
+      console.log("Vendor created", data);
+      router.push("vendor/home");
+    } catch (error) {
+      console.error("Submission error:", error);
+    }
+  };
+
   const handleNext = () => {
     console.log("Current Step:", currentStep);
     if (currentStep === steps.length - 1) {
+      handleSubmit();
       console.log("Navigating to Home...");
-      router.push("/");
     } else {
       console.log("Going to next step...");
       setCurrentStep(currentStep + 1);
