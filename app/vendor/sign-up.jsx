@@ -52,6 +52,51 @@ const VendorSignUp = () => {
     setFormData((prev) => ({ ...prev, phone_number: formatted }));
   };
 
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/vendors", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok)
+        throw new Error(data.message || "Failed to create vendor");
+
+      console.log("Vendor created", data);
+      router.push("vendor/home");
+    } catch (error) {
+      console.error("Submission error:", error);
+    }
+  };
+
+  const handleNext = () => {
+    console.log("Current Step:", currentStep);
+    if (currentStep === steps.length - 1) {
+      handleSubmit();
+      console.log("Navigating to Home...");
+    } else {
+      console.log("Going to next step...");
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    let previousStep = currentStep - 1;
+
+    if (steps[previousStep]?.isSkippable) {
+      previousStep -= 1; // Skip step
+    }
+
+    if (previousStep >= 0) {
+      setCurrentStep(previousStep);
+    } else {
+      router.push("/vendor/home"); // Go home if no previous step
+    }
+  };
+
   const steps = [
     {
       // label: "Step 1",
@@ -231,51 +276,6 @@ const VendorSignUp = () => {
       ),
     },
   ];
-
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/vendors", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok)
-        throw new Error(data.message || "Failed to create vendor");
-
-      console.log("Vendor created", data);
-      router.push("vendor/home");
-    } catch (error) {
-      console.error("Submission error:", error);
-    }
-  };
-
-  const handleNext = () => {
-    console.log("Current Step:", currentStep);
-    if (currentStep === steps.length - 1) {
-      handleSubmit();
-      console.log("Navigating to Home...");
-    } else {
-      console.log("Going to next step...");
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const handleBack = () => {
-    let previousStep = currentStep - 1;
-
-    if (steps[previousStep]?.isSkippable) {
-      previousStep -= 1; // Skip step
-    }
-
-    if (previousStep >= 0) {
-      setCurrentStep(previousStep);
-    } else {
-      router.push("/vendor/home"); // Go home if no previous step
-    }
-  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

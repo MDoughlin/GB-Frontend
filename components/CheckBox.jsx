@@ -16,11 +16,20 @@ export function CheckBox({ options, checkedValues, onChange, style }) {
                 : styles.checkBox
             }
             onPress={() => {
-              updatedCheckedValues.push(option.value);
+              if (active) {
+                updatedCheckedValues = updatedCheckedValues.filter(
+                  (val) => val !== option.value
+                );
+              } else {
+                updatedCheckedValues.push(option.value);
+              }
               onChange(updatedCheckedValues);
             }}
           >
-            <Icon name="checkbox-passive" size={24} />
+            <Icon
+              name={active ? "checkbox-active" : "checkbox-passive"}
+              size={24}
+            />
             <Text style={styles.text}>{option.label}</Text>
           </TouchableOpacity>
         );
