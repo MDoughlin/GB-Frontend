@@ -53,6 +53,10 @@ const VendorSignUp = () => {
   };
 
   const handleSubmit = async () => {
+    if (!validaetAll()) {
+      alert("Please complete all the required fields before submitting");
+    }
+
     try {
       const response = await fetch("http://localhost:3000/vendors", {
         method: "POST",
@@ -69,11 +73,17 @@ const VendorSignUp = () => {
       router.push("vendor/home");
     } catch (error) {
       console.error("Submission error:", error);
+      alert("An error occured while submitting the form");
     }
   };
 
   const handleNext = () => {
     console.log("Current Step:", currentStep);
+
+    if (!validateStep(currentStep)) {
+      alert("Please complete the required fields on this step");
+      return;
+    }
     if (currentStep === steps.length - 1) {
       handleSubmit();
       console.log("Navigating to Home...");
@@ -95,6 +105,43 @@ const VendorSignUp = () => {
     } else {
       router.push("/vendor/home"); // Go home if no previous step
     }
+  };
+
+  const validateStep = (stepIndex) => {
+    switch (stepIndex) {
+      case 0: //business name
+        return formData.business_name.trim() !== "";
+      case 1: //phone number
+        return /^\(\d{3}\)\s\d{3}-\d{4}$/.test(formData.phone_number);
+      case 2: // Business Hours
+        return Object.values(formData.business_hours).every((v) => {
+          const val = v.trim().toLowerCase();
+          return val === "closed" || val.match(/\d/); // at least one digit (e.g. "9am")
+        });
+      case 3: //social media
+        return true;
+      case 4: //skipped
+        return true;
+      case 5: //location
+        return true;
+      case 6: //payment methods
+        return formData.payment_method.length > 0;
+      case 7: //ordering
+        return formData.order_intstructions.trim() !== "";
+      case 8: //cuisine
+        return formData.cuisine_type.length > 0;
+      default:
+        return true;
+    }
+  };
+
+  const validaetAll = () => {
+    for (let i = 0; i < steps.length; i++) {
+      if (!validateStep(i)) {
+        return false;
+      }
+    }
+    return true;
   };
 
   const steps = [
