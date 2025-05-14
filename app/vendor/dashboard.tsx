@@ -15,7 +15,7 @@ const VendorDashboard = () => {
     { label: "Business Information", path: "/vendor/businessInfo" },
     { label: "Menu", path: "/vendor/menu" },
     { label: "Customer Engagement", path: "/vendor/analytics" },
-    { label: "Account and Security", path: "/vendor/account" },
+    { label: "Account and Security", path: "/vendor/accountAndSecurityMenu" },
   ];
 
   return (

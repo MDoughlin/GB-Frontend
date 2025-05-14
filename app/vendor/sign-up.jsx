@@ -53,24 +53,24 @@ const VendorSignUp = () => {
   };
 
   const handleSubmit = async () => {
+    console.log("Submitting data:", formData);
     if (!validaetAll()) {
       alert("Please complete all the required fields before submitting");
     }
 
     try {
-      const response = await fetch("http://localhost:3000/vendors", {
+      const response = await fetch("http://10.0.0.167:3000/vendor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${errorText}`);
+      }
       const data = await response.json();
-
-      if (!response.ok)
-        throw new Error(data.message || "Failed to create vendor");
-
       console.log("Vendor created", data);
-      router.push("vendor/home");
+      return true;
     } catch (error) {
       console.error("Submission error:", error);
       alert("An error occured while submitting the form");
@@ -87,6 +87,7 @@ const VendorSignUp = () => {
     if (currentStep === steps.length - 1) {
       handleSubmit();
       console.log("Navigating to Home...");
+      router.push("/vendor/home");
     } else {
       console.log("Going to next step...");
       setCurrentStep(currentStep + 1);
@@ -220,7 +221,10 @@ const VendorSignUp = () => {
               style={styles.socialInput}
               value={formData.instagram_url}
               onChangeText={(text) =>
-                setFormData((prev) => ({ ...prev, instagram_url: text }))
+                setFormData((prev) => ({
+                  ...prev,
+                  instagram_url: text.toLowerCase(),
+                }))
               }
               placeholder="yourhandle"
             />

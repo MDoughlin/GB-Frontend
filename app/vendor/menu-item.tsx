@@ -10,6 +10,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { BackButton } from "@/components/BackButton";
 
 const MenuItem = () => {
   const router = useRouter();
@@ -41,6 +42,7 @@ const MenuItem = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <BackButton route="/vendor/menu" />
       <Text style={styles.heading}>Add Item</Text>
       <TouchableOpacity onPress={uploadImage} style={styles.box}>
         <Text style={styles.boxText}>Upload Image</Text>

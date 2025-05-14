@@ -6,7 +6,6 @@ const VendorMenu = () => {
 
   return (
     <SafeAreaView>
-      <Text>Menu</Text>
       <Button
         title="Add Item"
         onPress={() => router.push("/vendor/menu-item")}
