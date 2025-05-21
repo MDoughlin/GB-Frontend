@@ -12,8 +12,11 @@ import {
 import { CheckBox } from "../../components/CheckBox";
 import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useAppDispatch } from "@/./store/store";
+import { setVendorId } from "@/store/vendorSlice";
 
 const VendorSignUp = () => {
+  const dispatch = useAppDispatch();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     business_name: "",
@@ -69,8 +72,9 @@ const VendorSignUp = () => {
         throw new Error(`Server error: ${errorText}`);
       }
       const data = await response.json();
-      console.log("Vendor created", data);
-      return true;
+      if (data?.id) {
+        dispatch(setVendorId(data.id));
+      }
     } catch (error) {
       console.error("Submission error:", error);
       alert("An error occured while submitting the form");

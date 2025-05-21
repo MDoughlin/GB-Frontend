@@ -1,6 +1,10 @@
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAppDispatch } from "../../store/hooks";
+import { setVendorId } from "@/store/vendorSlice";
+
 import {
   View,
   Text,
@@ -12,6 +16,7 @@ import {
 
 const VendorHomeScreen = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [vendors, setVendors] = useState([]);
 
   useEffect(() => {
@@ -30,7 +35,10 @@ const VendorHomeScreen = () => {
   const renderVendor = ({ item }) => (
     <TouchableOpacity
       style={styles.circle}
-      onPress={() => router.push(`/vendor/dashboard`)}
+      onPress={() => {
+        dispatch(setVendorId(item.id));
+        router.push(`/vendor/dashboard`);
+      }}
     >
       <Text style={styles.circleText}>{item.business_name.charAt(0)}</Text>
     </TouchableOpacity>

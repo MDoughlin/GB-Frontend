@@ -1,5 +1,6 @@
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { BackButton } from "@/components/BackButton";
+
 import {
   SafeAreaView,
   Text,
@@ -10,8 +11,9 @@ import {
 
 const VendorDashboard = () => {
   const router = useRouter();
+  const { vendorId } = useLocalSearchParams();
 
-  const dashboardItens = [
+  const dashboardItems = [
     { label: "Business Information", path: "/vendor/businessInfo" },
     { label: "Menu", path: "/vendor/menu" },
     { label: "Customer Engagement", path: "/vendor/analytics" },
@@ -23,10 +25,15 @@ const VendorDashboard = () => {
       <BackButton />
       <View style={styles.circle} />
       <View style={styles.dashboardList}>
-        {dashboardItens.map((item, index) => (
+        {dashboardItems.map((item, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => router.push(item.path as any)}
+            onPress={() =>
+              router.push({
+                pathname: item.path as any,
+                params: { title: item.label },
+              })
+            }
             style={styles.dashboardItem}
           >
             <Text style={styles.dashboardText}>{item.label}</Text>
