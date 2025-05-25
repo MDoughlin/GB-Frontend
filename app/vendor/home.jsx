@@ -1,6 +1,5 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState, useCallback } from "react";
-import { useFocusEffect } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppDispatch } from "../../store/hooks";
 import { setVendorId } from "@/store/vendorSlice";
@@ -37,7 +36,10 @@ const VendorHomeScreen = () => {
       style={styles.circle}
       onPress={() => {
         dispatch(setVendorId(item.id));
-        router.push(`/vendor/dashboard`);
+        router.push({
+          pathname: `/vendor/dashboard`,
+          params: { vendorId: item.id },
+        });
       }}
     >
       <Text style={styles.circleText}>{item.business_name.charAt(0)}</Text>
