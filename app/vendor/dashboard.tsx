@@ -13,8 +13,6 @@ const VendorDashboard = () => {
   const router = useRouter();
   const { vendorId } = useLocalSearchParams();
 
-  console.log("vendorId:", vendorId);
-
   const dashboardItems = [
     { label: "Business Information", path: "/vendor/businessInformation" },
     { label: "Menu", path: "/vendor/menu" },
