@@ -30,7 +30,9 @@ const InfoRow = ({ label, value, onEdit }: InfoRowProps) => (
   <View style={styles.row}>
     <View>
       <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value || "N/A"}</Text>
+      <Text style={styles.value}>
+        {Array.isArray(value) ? value.join(", ") : value || "N/A"}
+      </Text>
     </View>
     <TouchableOpacity onPress={onEdit}>
       <Text style={styles.edit}>Edit</Text>
@@ -42,27 +44,50 @@ const businessInformation = () => {
   const router = useRouter();
   const { vendorId } = useLocalSearchParams();
   const [vendor, setVendor] = useState<Vendor | null>(null);
+  const [cuisineOptions, setCuisineOptions] = useState<string[]>([]);
+  const [paymentOptions, setPaymentOptions] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log("Vendor ID:", vendorId);
-
     if (!vendorId) return;
 
-    const fetchVendor = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://10.0.0.167:3000/vendor/${vendorId}`
-        );
-        const data = await response.json();
-        console.log("Fetched Vendor:", data);
-        setVendor(data);
-      } catch (error) {
-        console.error("Error fetching vendor:", error);
+        const [vendorRes, cuisineRes, paymentRes] = await Promise.all([
+          fetch(`http://10.0.0.167:3000/vendor/${vendorId}`),
+          fetch("http://10.0.0.167:3000/vendor/options/cuisine-types"),
+          fetch("http://10.0.0.167:3000/vendor/options/payment-methods"),
+        ]);
+
+        const vendorData = await vendorRes.json();
+        const cuisines = await cuisineRes.json();
+        const payments = await paymentRes.json();
+
+        setVendor(vendorData);
+        setCuisineOptions(cuisines);
+        setPaymentOptions(payments);
+      } catch (err) {
+        console.error("Failed to fetch data", err);
       }
     };
 
-    fetchVendor();
+    fetchData();
   }, [vendorId]);
+
+  const handleEdit = (
+    field: string,
+    value: string | string[] | object,
+    options?: string[]
+  ) => {
+    router.push({
+      pathname: "/vendor/editVendor",
+      params: {
+        vendorId,
+        field,
+        value: JSON.stringify(value),
+        ...(options ? { options: JSON.stringify(options) } : {}),
+      },
+    });
+  };
 
   if (!vendor) {
     return <Text>Loading...</Text>;
@@ -74,103 +99,48 @@ const businessInformation = () => {
       <InfoRow
         label="Business Name"
         value={vendor.business_name}
-        onEdit={() =>
-          router.push({
-            pathname: "/vendor/editVendor",
-            params: {
-              vendorId,
-              field: "business_name",
-              value: vendor.business_name,
-            },
-          })
-        }
+        onEdit={() => handleEdit("business_name", vendor.business_name)}
       />
       <InfoRow
         label="Phone Number"
         value={vendor.phone_number}
-        onEdit={() =>
-          router.push({
-            pathname: "/vendor/editVendor",
-            params: {
-              vendorId,
-              field: "phone_number",
-              value: vendor.phone_number,
-            },
-          })
-        }
+        onEdit={() => handleEdit("phone_number", vendor.phone_number)}
       />
       <InfoRow
         label="Business Hours"
         value={Object.entries(vendor.business_hours)
           .map(([day, hours]) => `${day}: ${hours}`)
           .join(", ")}
-        onEdit={() => {
-          router.push({
-            pathname: "/vendor/editVendor",
-            params: {
-              vendorId,
-              field: "business_hours",
-              value: JSON.stringify(vendor.business_hours),
-            },
-          });
-        }}
+        onEdit={() => handleEdit("business_hours", vendor.business_hours)}
       />
-      <InfoRow label="Location" value={vendor.location} onEdit={() => {}} />
       <InfoRow
         label="Instagram"
         value={vendor.instagram_url}
-        onEdit={() => {
-          router.push({
-            pathname: "/vendor/editVendor",
-            params: {
-              vendorId,
-              field: "instagram_url",
-              value: vendor.instagram_url,
-            },
-          });
-        }}
+        onEdit={() => handleEdit("instagram_url", vendor.instagram_url)}
       />
       <InfoRow
         label="Facebook"
         value={vendor.facebook_url}
-        onEdit={() => {
-          router.push({
-            pathname: "/vendor/editVendor",
-            params: {
-              vendorId,
-              field: "facebook_url",
-              value: vendor.facebook_url,
-            },
-          });
-        }}
+        onEdit={() => handleEdit("facebook_url", vendor.facebook_url)}
+      />
+      <InfoRow
+        label="Location"
+        value={vendor.location}
+        onEdit={() => handleEdit("location", vendor.location)}
       />
       <InfoRow
         label="Payment Methods"
         value={vendor.payment_method}
-        onEdit={() => {
-          router.push({
-            pathname: "/vendor/editVendor",
-            params: {
-              vendorId,
-              field: "payment_method",
-              value: JSON.stringify(vendor.payment_method),
-            },
-          });
-        }}
+        onEdit={() =>
+          handleEdit("payment_method", vendor.payment_method, paymentOptions)
+        }
       />
       <InfoRow
         label="Order Instructions"
         value={vendor.order_instructions}
-        onEdit={() => {
-          router.push({
-            pathname: "/vendor/editVendor",
-            params: {
-              vendorId,
-              field: "order_instructions",
-              value: vendor.order_instructions,
-            },
-          });
-        }}
+        onEdit={() =>
+          handleEdit("order_instructions", vendor.order_instructions)
+        }
       />
       <InfoRow
         label="Cuisine Type"
