@@ -17,6 +17,12 @@ const MenuItem = () => {
 
   const [image, setImage] = useState<string | null>(null);
   const [selected, setSelected] = useState("");
+  const [formData, setFormdata] = useState({
+    item: "",
+    price: "",
+    image: "",
+    category: [],
+  });
 
   const cuisine = [
     { key: "1", value: "Traditional Bajan" },
@@ -40,6 +46,35 @@ const MenuItem = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    //turns price from string to number
+    const payload = {
+      ...formData,
+      price: formData.price ? parseFloat(formData.price) : null,
+    };
+    console.log("SUBMIT PAYLOAD:", payload);
+
+    try {
+      const response = await fetch("http://10.0.0.167:3000/menu", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${errorText}`);
+      }
+      const data = await response.json();
+      // if (data.id) {
+      alert("Menu item added successfully!");
+      router.back();
+      // }
+    } catch (error) {
+      console.error("Error submitting menu item", error);
+      alert("Failed to submit menu item. Please try again");
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <BackButton route="/vendor/menu" />
@@ -52,6 +87,10 @@ const MenuItem = () => {
       <TextInput
         placeholder="Price"
         keyboardType="numeric"
+        value={formData.price}
+        onChangeText={(text) =>
+          setFormdata((prev) => ({ ...prev, price: text.trim() }))
+        }
         style={styles.input}
       />
       <Text>Category</Text>
@@ -64,7 +103,7 @@ const MenuItem = () => {
       />
       {/* needs to submit and redirect to menu screen  */}
       <TouchableOpacity>
-        <Text style={styles.button} onPress={() => router.push("/vendor/menu")}>
+        <Text style={styles.button} onPress={handleSubmit}>
           Add Item
         </Text>
       </TouchableOpacity>

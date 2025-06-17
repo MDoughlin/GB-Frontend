@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { BackButton } from "@/components/BackButton";
 import {
   SafeAreaView,
   Text,
@@ -95,6 +96,7 @@ const businessInformation = () => {
 
   return (
     <SafeAreaView>
+      <BackButton />
       <Text>Business Information</Text>
       <InfoRow
         label="Business Name"
@@ -174,6 +176,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   edit: {},
+  value: {},
 });
 
 export default businessInformation;

@@ -28,9 +28,9 @@ const EditVendor = () => {
       try {
         if (field === "cuisine_type" || field === "payment_method") {
           const res = await fetch(
-            "http://10.0.0.167:3000/vendor/options/cuisine-types"
+            `http://10.0.0.167:3000/vendor/options/${field}`
           );
-          const data = await res.json(); // This fails if res is not JSON
+          const data = await res.json();
           setOptions(data);
         }
       } catch (err) {
