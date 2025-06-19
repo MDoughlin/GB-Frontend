@@ -1,7 +1,10 @@
 import { SetStateAction, useState } from "react";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
+import { BackButton } from "@/components/BackButton";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 import {
   SafeAreaView,
   Text,
@@ -10,13 +13,13 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { BackButton } from "@/components/BackButton";
 
 const MenuItem = () => {
   const router = useRouter();
-
   const [image, setImage] = useState<string | null>(null);
   const [selected, setSelected] = useState("");
+  const vendor = useSelector((state: RootState) => state.vendor);
+  const vendorId = vendor.vendorId;
   const [formData, setFormdata] = useState({
     item: "",
     price: "",
@@ -50,9 +53,11 @@ const MenuItem = () => {
     //turns price from string to number
     const payload = {
       ...formData,
+      vendor_id: vendorId,
       price: formData.price ? parseFloat(formData.price) : null,
     };
     console.log("SUBMIT PAYLOAD:", payload);
+    console.log("Final Payload being sent:", payload);
 
     try {
       const response = await fetch("http://10.0.0.167:3000/menu", {
@@ -83,7 +88,14 @@ const MenuItem = () => {
         <Text style={styles.boxText}>Upload Image</Text>
       </TouchableOpacity>
       {image && <Image source={{ uri: image }} style={styles.image} />}
-      <TextInput placeholder="Item Name" style={styles.input} />
+      <TextInput
+        placeholder="Item Name"
+        value={formData.item}
+        onChangeText={(text) =>
+          setFormdata((prev) => ({ ...prev, item: text }))
+        }
+        style={styles.input}
+      />
       <TextInput
         placeholder="Price"
         keyboardType="numeric"

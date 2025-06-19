@@ -2,24 +2,28 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface VendorState {
   vendorId: string | null;
+  name: string;
 }
 
 const initialState: VendorState = {
   vendorId: null,
+  name: "",
 };
 
 const VendorSlice = createSlice({
   name: "vendor",
   initialState,
   reducers: {
-    setVendorId: (state, action: PayloadAction<string>) => {
-      state.vendorId = action.payload;
+    setVendorData: (
+      state,
+      action: PayloadAction<{ vendorId: string; name: string }>
+    ) => {
+      state.vendorId = action.payload.vendorId;
+      state.name = action.payload.name;
     },
-    clearVendorId: (state) => {
-      state.vendorId = null;
-    },
+    clearVendor: () => initialState,
   },
 });
 
-export const { setVendorId, clearVendorId } = VendorSlice.actions;
+export const { setVendorData, clearVendor } = VendorSlice.actions;
 export default VendorSlice.reducer;

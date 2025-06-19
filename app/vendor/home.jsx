@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState, useCallback } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppDispatch } from "../../store/hooks";
-import { setVendorId } from "@/store/vendorSlice";
+import { setVendorData } from "@/store/vendorSlice";
 
 import {
   View,
@@ -35,7 +35,9 @@ const VendorHomeScreen = () => {
     <TouchableOpacity
       style={styles.circle}
       onPress={() => {
-        dispatch(setVendorId(item.id));
+        dispatch(
+          setVendorData({ vendorId: item.id, name: item.business_name })
+        );
         router.push({
           pathname: `/vendor/dashboard`,
           params: { vendorId: item.id },
