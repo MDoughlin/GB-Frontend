@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
+import { CheckBox } from "../../components/CheckBox";
+import Icon from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useAppDispatch } from "@/./store/store";
+import { setVendorId } from "@/store/vendorSlice";
+import {
+  getCurrentLocation,
+  reverseGeocodeWithNominatim,
+} from "@/services/location";
 import {
   Text,
   View,
@@ -8,12 +17,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { CheckBox } from "../../components/CheckBox";
-import Icon from "react-native-vector-icons/Ionicons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useAppDispatch } from "@/./store/store";
-import { setVendorId } from "@/store/vendorSlice";
 
 const VendorSignUp = () => {
   const dispatch = useAppDispatch();
@@ -169,16 +174,18 @@ const VendorSignUp = () => {
     {
       // label: "Step 2",
       content: (
-        <View style={styles.stepContent}>
-          <Text style={styles.heading}>Phone Number</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Phone Number"
-            keyboardType="phone-pad"
-            value={formData.phone_number}
-            onChangeText={handlePhoneNumberFormat}
-          />
-        </View>
+        <TouchableWithoutFeedback>
+          <View style={styles.stepContent}>
+            <Text style={styles.heading}>Phone Number</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Phone Number"
+              keyboardType="phone-pad"
+              value={formData.phone_number}
+              onChangeText={handlePhoneNumberFormat}
+            />
+          </View>
+        </TouchableWithoutFeedback>
       ),
     },
 
@@ -262,10 +269,34 @@ const VendorSignUp = () => {
       content: (
         <View style={styles.stepContent}>
           <Text style={styles.heading}>Location</Text>
-          <Icon name="location-outline" size={400} />
-          <Text style={styles.details}>
-            Pin location while at establishment. This will be shown to users.
-          </Text>
+          <Text style={styles.details}>Pin My Location</Text>
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                const coords = await getCurrentLocation();
+                const address = await reverseGeocodeWithNominatim(
+                  coords.latitude,
+                  coords.longitude
+                );
+
+                setFormData((prev) => ({
+                  ...prev,
+                  location: address,
+                }));
+              } catch (error) {
+                alert("Could not get location: " + error.message);
+              }
+            }}
+          >
+            {" "}
+            <Icon name="location-outline" size={400} />
+          </TouchableOpacity>
+          {formData.location !== "" && (
+            <View>
+              <Text>Location Pinned:</Text>
+              <Text>{formData.location}</Text>
+            </View>
+          )}
         </View>
       ),
     },
