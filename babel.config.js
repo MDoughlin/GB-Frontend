@@ -1,7 +1,7 @@
-module.exports = {
-  presets: [
-    "babel-preset-expo",
-    "@babel/preset-typescript",
-    "@babel/preset-flow",
-  ],
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: ["babel-preset-expo"],
+    plugins: ["expo-router/babel"],
+  };
 };

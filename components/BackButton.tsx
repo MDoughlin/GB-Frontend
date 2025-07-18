@@ -3,7 +3,7 @@ import { TouchableOpacity } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 type Props = {
-  route?: string;
+  route: string;
 };
 
 export function BackButton(props: Props = { route: "/" }) {

@@ -96,7 +96,7 @@ const businessInformation = () => {
 
   return (
     <SafeAreaView>
-      <BackButton />
+      <BackButton route="" />
       <Text>Business Information</Text>
       <InfoRow
         label="Business Name"
