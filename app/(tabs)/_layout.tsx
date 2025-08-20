@@ -7,7 +7,7 @@ export default function TabsLayout() {
     <>
       <StatusBar style="auto" />
       <Tabs screenOptions={{ headerShown: false }}>
-        <Tabs.Screen name="home" options={{ title: "Home" }} />
+        <Tabs.Screen name="index" options={{ title: "Home" }} />
         <Tabs.Screen name="menu" options={{ title: "Menu" }} />
         <Tabs.Screen name="dashboard" options={{ title: "Account" }} />
       </Tabs>

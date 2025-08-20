@@ -1,5 +1,5 @@
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { BackButton } from "@/components/BackButton";
+import { BackButton } from "@/components/Button";
 
 import {
   SafeAreaView,

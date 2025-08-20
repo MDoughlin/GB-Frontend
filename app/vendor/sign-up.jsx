@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useAppDispatch } from "@/./store/store";
 import { setVendorId } from "@/store/vendorSlice";
+import { Button } from "../../components/Button";
 import {
   getCurrentLocation,
   reverseGeocodeWithNominatim,
@@ -21,7 +22,7 @@ import {
 } from "react-native";
 
 const VendorSignUp = () => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     business_name: "",

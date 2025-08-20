@@ -2,7 +2,7 @@ import { SetStateAction, useState } from "react";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
-import { BackButton } from "@/components/BackButton";
+import { BackButton } from "@/components/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import {

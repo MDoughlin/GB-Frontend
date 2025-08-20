@@ -1,4 +1,4 @@
-import { BackButton } from "@/components/BackButton";
+import { BackButton } from "@/components/Button";
 import { useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";
@@ -36,7 +36,6 @@ const accountAndSecurityMenu = () => {
                 console.warn("vendorId is undefined");
                 return;
               }
-
               router.push({
                 pathname: item.path,
                 params: { vendorId },
