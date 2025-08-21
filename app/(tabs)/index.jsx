@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppDispatch } from "../../store/hooks";
 import { setVendorData } from "@/store/vendorSlice";
-
+import { Button } from "../../components/Button";
 import {
   View,
   Text,
@@ -74,11 +74,9 @@ const VendorHomeScreen = () => {
           <>
             <Text>CTA</Text>
             <Text>Let's Add Your Establishment</Text>
-            <MaterialCommunityIcons
-              style={styles.addButtonTwo}
-              name="plus-circle-outline"
-              size={40}
-              onPress={() => router.push("/vendor/sign-up")}
+            <Button
+              label="Add Your First Business"
+              navigateTo="/vendor/sign-up"
             />
           </>
         )}

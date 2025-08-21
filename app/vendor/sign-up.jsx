@@ -6,6 +6,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useAppDispatch } from "@/./store/store";
 import { setVendorId } from "@/store/vendorSlice";
 import { Button } from "../../components/Button";
+import { BackButton } from "../../components/BackButton";
 import {
   getCurrentLocation,
   reverseGeocodeWithNominatim,
@@ -22,7 +23,6 @@ import {
 } from "react-native";
 
 const VendorSignUp = () => {
-  // const dispatch = useAppDispatch();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     business_name: "",
@@ -105,16 +105,10 @@ const VendorSignUp = () => {
   };
 
   const handleBack = () => {
-    let previousStep = currentStep - 1;
-
-    if (steps[previousStep]?.isSkippable) {
-      previousStep -= 1; // Skip step
-    }
-
-    if (previousStep >= 0) {
-      setCurrentStep(previousStep);
+    if (currentStep === 0) {
+      router.push("/");
     } else {
-      router.push("/vendor/home"); // Go home if no previous step
+      let previousStep = currentStep - 1;
     }
   };
 
@@ -371,29 +365,13 @@ const VendorSignUp = () => {
         {steps[currentStep].content}
       </View>
       <View>
-        {/* <TouchableOpacity
+        <BackButton
+          onPress={handleBack}
           style={[
             styles.backButton,
             currentStep === 0 && styles.disabledButton,
           ]}
-          onPress={handleBack}
-        > */}
-        {/* This is the back button NEED TO USE COMPONENT*/}
-        {/* <MaterialIcons name="arrow-back-ios-new" size={30} /> */}
-        {/* </TouchableOpacity> */}
-        <Button
-          icon={
-            <MaterialIcons
-              name="arrow-back-ios-new"
-              size={30}
-              color={currentStep === 0 ? "#ccc" : "#000"}
-            />
-          }
-          onPress={handleBack}
-          disabled={currentStep === 0}
-          style={styles.backButton}
         />
-
         <Button
           label={currentStep === steps.length - 1 ? "DONE" : "CONTINUE"}
           onPress={handleNext}

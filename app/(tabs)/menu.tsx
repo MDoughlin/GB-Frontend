@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { setVendorData } from "@/store/vendorSlice";
-import { BackButton } from "@/components/Button";
+import { BackButton } from "../../components/BackButton";
 import {
   Text,
   SafeAreaView,

@@ -1,24 +1,26 @@
 import { useRouter } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, StyleProp, ViewStyle } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type Props = {
   route?: string;
+  onPress?: () => void;
+  style?: StyleProp<ViewStyle>;
 };
 
-export function BackButton(props: Props = { route: "/" }) {
+export function BackButton({ route = "/", onPress, style }: Props) {
   const router = useRouter();
 
   const handleRoute = () => {
-    if (props.route) {
-      router.push(props.route as any);
+    if (onPress) {
+      onPress();
     } else {
       router.push("/");
     }
   };
 
   return (
-    <TouchableOpacity onPress={handleRoute}>
+    <TouchableOpacity onPress={handleRoute} style={style}>
       <MaterialIcons name="arrow-back-ios-new" size={30} />
     </TouchableOpacity>
   );
