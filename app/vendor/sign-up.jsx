@@ -371,22 +371,33 @@ const VendorSignUp = () => {
         {steps[currentStep].content}
       </View>
       <View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[
             styles.backButton,
             currentStep === 0 && styles.disabledButton,
           ]}
           onPress={handleBack}
-          // disabled={currentStep === 0}
-        >
-          {/* This is the back button */}
-          <MaterialIcons name="arrow-back-ios-new" size={30} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-          <Text style={styles.nextButtonText}>
-            {currentStep === steps.length - 1 ? "DONE" : "CONTINUE"}
-          </Text>
-        </TouchableOpacity>
+        > */}
+        {/* This is the back button NEED TO USE COMPONENT*/}
+        {/* <MaterialIcons name="arrow-back-ios-new" size={30} /> */}
+        {/* </TouchableOpacity> */}
+        <Button
+          icon={
+            <MaterialIcons
+              name="arrow-back-ios-new"
+              size={30}
+              color={currentStep === 0 ? "#ccc" : "#000"}
+            />
+          }
+          onPress={handleBack}
+          disabled={currentStep === 0}
+          style={styles.backButton}
+        />
+
+        <Button
+          label={currentStep === steps.length - 1 ? "DONE" : "CONTINUE"}
+          onPress={handleNext}
+        />
       </View>
     </SafeAreaView>
   );
@@ -469,18 +480,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   socialMedia: {},
-  nextButton: {
-    backgroundColor: "#FBBC05",
-    paddingVertical: 12,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 40,
-    marginRight: 40,
-  },
-  nextButtonText: {
-    color: "#fff",
-  },
   backButton: {
     left: 10,
     bottom: 680,
