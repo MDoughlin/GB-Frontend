@@ -40,7 +40,7 @@ export function Button({
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.button}>
+    <TouchableOpacity onPress={handlePress} style={[styles.button, style]}>
       {icon && <View style={styles.icon}>{icon}</View>}
       <Text style={styles.label}>{label}</Text>
     </TouchableOpacity>

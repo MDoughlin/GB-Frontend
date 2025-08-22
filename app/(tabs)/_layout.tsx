@@ -1,15 +1,40 @@
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function TabsLayout() {
   return (
     <>
       <StatusBar style="auto" />
       <Tabs screenOptions={{ headerShown: false }}>
-        <Tabs.Screen name="index" options={{ title: "Home" }} />
-        <Tabs.Screen name="menu" options={{ title: "Menu" }} />
-        <Tabs.Screen name="dashboard" options={{ title: "Account" }} />
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Home",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="home" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="menu"
+          options={{
+            title: "Menu",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="fastfood" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="dashboard"
+          options={{
+            title: "Account",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialIcons name="settings" color={color} size={size} />
+            ),
+          }}
+        />
       </Tabs>
     </>
   );

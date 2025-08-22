@@ -72,11 +72,12 @@ const VendorHomeScreen = () => {
           </>
         ) : (
           <>
-            <Text>CTA</Text>
-            <Text>Let's Add Your Establishment</Text>
+            <View style={styles.avatar} />
+            <Text style={styles.name}>Chester Heels</Text>
             <Button
               label="Add Your First Business"
               navigateTo="/vendor/sign-up"
+              style={{}}
             />
           </>
         )}
@@ -89,6 +90,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 30,
+    marginTop: 20,
+  },
+  avatar: {
+    width: 150,
+    height: 150,
+    backgroundColor: "black",
+    borderRadius: 80,
+    alignSelf: "center",
+  },
+  name: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    alignSelf: "center",
   },
   circle: {
     width: 50,
