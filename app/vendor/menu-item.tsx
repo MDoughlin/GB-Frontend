@@ -1,11 +1,13 @@
 import { SetStateAction, useState } from "react";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
-import { BackButton } from "@/components/Button";
+import { BackButton } from "@/components/BackButton";
+import { Button } from "@/components/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import {
+  View,
   SafeAreaView,
   Text,
   StyleSheet,
@@ -50,7 +52,6 @@ const MenuItem = () => {
   };
 
   const handleSubmit = async () => {
-    //turns price from string to number
     const payload = {
       ...formData,
       vendor_id: vendorId,
@@ -84,10 +85,7 @@ const MenuItem = () => {
     <SafeAreaView style={styles.container}>
       <BackButton route="/vendor/menu" />
       <Text style={styles.heading}>Add Item</Text>
-      <TouchableOpacity onPress={uploadImage} style={styles.box}>
-        <Text style={styles.boxText}>Upload Image</Text>
-      </TouchableOpacity>
-      {image && <Image source={{ uri: image }} style={styles.image} />}
+      {/* {image && <Image source={{ uri: image }} style={styles.image} />} */}
       <TextInput
         placeholder="Item Name"
         value={formData.item}
@@ -105,27 +103,33 @@ const MenuItem = () => {
         }
         style={styles.input}
       />
-      <Text>Category</Text>
+      <Text>Cuisine Type</Text>
       <MultipleSelectList
         setSelected={(val: SetStateAction<string>) => setSelected(val)}
         data={cuisine}
         save="value"
         label="Cuisine"
         search={false}
+        boxStyles={{ width: 330, borderColor: "black" }}
       />
-      {/* needs to submit and redirect to menu screen  */}
-      <TouchableOpacity>
-        <Text style={styles.button} onPress={handleSubmit}>
-          Add Item
+      <TouchableOpacity onPress={uploadImage} style={styles.photoBox}>
+        <Text style={styles.boxText}>Upload Photo</Text>
+        <Text>
+          Add a photo of your dish to make it more {"\n"} appealing to customers
         </Text>
       </TouchableOpacity>
+      <Button
+        label="Add item"
+        onPress={handleSubmit}
+        style={{ minWidth: 350 }}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
   },
   heading: {
@@ -134,17 +138,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   boxText: {
-    position: "absolute",
-    bottom: 3,
-    right: 25,
-  },
-  box: {
-    width: 150,
-    height: 150,
-    borderWidth: 2,
-    borderColor: "grey",
-    backgroundColor: " grey",
-    marginBottom: 25,
+    fontWeight: "bold",
+    alignSelf: "center",
   },
   image: {
     width: 200,
@@ -161,16 +156,16 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     marginBottom: 20,
   },
-  button: {
-    backgroundColor: "#FBBC05",
-    paddingVertical: 12,
-    borderRadius: 20,
+  photoBox: {
+    width: 350,
+    height: 200,
+    borderWidth: 2,
+    borderColor: "grey",
+    backgroundColor: " grey",
+    marginBottom: 25,
+    borderStyle: "dashed",
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 40,
-    marginRight: 40,
-    color: "#fff",
-    bottom: 0,
   },
 });
 

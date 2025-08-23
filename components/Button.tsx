@@ -13,7 +13,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 type Props = {
   label: string;
-  route: string;
+  route?: string;
   onPress?: (event: GestureResponderEvent) => void;
   navigateTo?: string;
   icon?: React.ReactNode;
