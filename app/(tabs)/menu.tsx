@@ -44,10 +44,6 @@ const VendorMenu = () => {
       <BackButton />
       <View>
         <Text>{title}</Text>
-        <Button
-          title="Add Item"
-          onPress={() => router.push("/vendor/menu-item")}
-        />
       </View>
 
       <FlatList
@@ -63,10 +59,21 @@ const VendorMenu = () => {
           </View>
         )}
         ListEmptyComponent={
-          <Text style={{ padding: 16, textAlign: "center" }}>
-            No menu items added yet.
-          </Text>
+          <>
+            <Text
+              style={{ padding: 16, textAlign: "center", fontWeight: "bold" }}
+            >
+              No Items yet
+            </Text>
+            <Text style={{ padding: 16, textAlign: "center" }}>
+              Start adding items to your menu to showcase your delicious meals.
+            </Text>
+          </>
         }
+      />
+      <Button
+        title="Add Item"
+        onPress={() => router.push("/vendor/menu-item")}
       />
     </SafeAreaView>
   );

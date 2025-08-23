@@ -23,7 +23,6 @@ const VendorDashboard = () => {
   return (
     <SafeAreaView style={styles.container}>
       <BackButton route="/vendor/home" />
-      <View style={styles.circle} />
       <View style={styles.dashboardList}>
         {dashboardItems.map((item, index) => (
           <TouchableOpacity

@@ -7,7 +7,6 @@ import { Button } from "@/components/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import {
-  View,
   SafeAreaView,
   Text,
   StyleSheet,
