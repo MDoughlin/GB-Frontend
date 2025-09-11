@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
-// import { CheckBox } from "../../components/CheckBox";
-// import Icon from "react-native-vector-icons/Ionicons";
 import { setVendorId } from "@/store/vendorSlice";
 import { Button } from "../../components/Button";
 import { BackButton } from "../../components/BackButton";
@@ -13,27 +11,10 @@ import { StepOrderingInstruction } from "../../components/steps/StepOrderingInst
 import { StepPaymentMethods } from "../../components/steps/StepPaymentMethods";
 import { StepPhoneNumber } from "../../components/steps/StepPhoneNumber";
 import { StepSocialMedia } from "../../components/steps/StepSocialMedia";
-import FormData from "../../types/FormData";
-// import {
-//   getCurrentLocation,
-//   reverseGeocodeWithNominatim,
-// } from "@/services/location";
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  ScrollView,
-  TouchableWithoutFeedback,
-} from "react-native";
-
-console.log("StepBusinessName:", StepBusinessName);
+import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 
 const VendorSignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  // const [formData, setFormData] = useState<FormData>
   const [formData, setFormData] = useState({
     business_name: "",
     phone_number: "",
@@ -53,23 +34,6 @@ const VendorSignUp = () => {
     order_intstructions: "",
     cuisine_type: [],
   });
-
-  // const formatPhoneNumber = (text) => {
-  //   const cleaned = text.replace(/\D/g, "");
-  //   const length = cleaned.length;
-
-  //   if (length < 4) return cleaned;
-  //   if (length < 7) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
-  //   return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
-  //     6,
-  //     10
-  //   )}`;
-  // };
-
-  // const handlePhoneNumberFormat = (text) => {
-  //   const formatted = formatPhoneNumber(text);
-  //   setFormData((prev) => ({ ...prev, phone_number: formatted }));
-  // };
 
   const handleSubmit = async () => {
     console.log("Submitting data:", formData);
@@ -210,213 +174,6 @@ const VendorSignUp = () => {
       content: <StepCuisine formData={formData} setFormData={setFormData} />,
     },
   ];
-  // const steps = [
-  //   {
-  //     // label: "Step 1",
-  //     content: (
-  //       <View style={styles.stepContent}>
-  //         <Text style={styles.heading}>Business Name</Text>
-  //         <TextInput
-  //           style={styles.input}
-  //           placeholder="Name of Business"
-  //           value={formData.business_name}
-  //           onChangeText={(text) =>
-  //             setFormData((prev) => ({ ...prev, business_name: text }))
-  //           }
-  //         />
-  //       </View>
-  //     ),
-  //   },
-  //   {
-  //     // label: "Step 2",
-  //     content: (
-  //       <TouchableWithoutFeedback>
-  //         <View style={styles.stepContent}>
-  //           <Text style={styles.heading}>Phone Number</Text>
-  //           <TextInput
-  //             style={styles.input}
-  //             placeholder="Phone Number"
-  //             keyboardType="phone-pad"
-  //             value={formData.phone_number}
-  //             onChangeText={handlePhoneNumberFormat}
-  //           />
-  //         </View>
-  //       </TouchableWithoutFeedback>
-  //     ),
-  //   },
-
-  //   {
-  //     // label: "Step 3",
-  //     content: (
-  //       <ScrollView>
-  //         <View>
-  //           <Text style={styles.heading}>Business Hours</Text>
-  //           {Object.keys(formData.business_hours).map((day) => (
-  //             <View key={day}>
-  //               <Text>{day}:</Text>
-  //               <TextInput
-  //                 key={day}
-  //                 style={styles.businessInput}
-  //                 placeholder={`${day} Hours`}
-  //                 value={formData.business_hours[day]}
-  //                 onChangeText={(text) =>
-  //                   setFormData((prev) => ({
-  //                     ...prev,
-  //                     business_hours: {
-  //                       ...prev.business_hours,
-  //                       [day]: text,
-  //                     },
-  //                   }))
-  //                 }
-  //               />
-  //             </View>
-  //           ))}
-  //         </View>
-  //       </ScrollView>
-  //     ),
-  //   },
-  //   {
-  //     // label: "Skipped Step",
-  //     content: (
-  //       <View style={styles.socialSection}>
-  //         <Text style={styles.heading}>Social Media</Text>
-  //         <Text style={styles.inputLabel}>Instagram Handle:</Text>
-  //         <View style={styles.inputContainer}>
-  //           <Icon style={styles.icon} name="logo-instagram" />
-  //           <Text style={styles.staticPrefix}>www.instagram.com/</Text>
-  //           <TextInput
-  //             style={styles.socialInput}
-  //             value={formData.instagram_url}
-  //             onChangeText={(text) =>
-  //               setFormData((prev) => ({
-  //                 ...prev,
-  //                 instagram_url: text.toLowerCase(),
-  //               }))
-  //             }
-  //             placeholder="yourhandle"
-  //           />
-  //         </View>
-  //         <Text style={styles.inputLabel}>Facebook:</Text>
-  //         <View style={styles.inputContainer}>
-  //           <Icon style={styles.icon} name="logo-facebook" />
-  //           <Text style={styles.staticPrefix}>www.facebook.com/</Text>
-  //           <TextInput
-  //             style={styles.socialInput}
-  //             value={formData.facebook_url}
-  //             onChangeText={(text) =>
-  //               setFormData((prev) => ({ ...prev, facebook_url: text }))
-  //             }
-  //             placeholder="username"
-  //           ></TextInput>
-  //         </View>
-  //       </View>
-  //     ),
-  //   },
-  //   {
-  //     // label: "Skipped Step",
-  //     content: (
-  //       <View style={styles.stepContent}>
-  //         <Text style={styles.details}>Now, Let's add the details</Text>
-  //       </View>
-  //     ),
-  //   },
-  //   {
-  //     label: "Step 4",
-  //     content: (
-  //       <View style={styles.stepContent}>
-  //         <Text style={styles.heading}>Location</Text>
-  //         <Text style={styles.details}>Pin My Location</Text>
-  //         <TouchableOpacity
-  //           onPress={async () => {
-  //             try {
-  //               const coords = await getCurrentLocation();
-  //               const address = await reverseGeocodeWithNominatim(
-  //                 coords.latitude,
-  //                 coords.longitude
-  //               );
-  //               setFormData((prev) => ({
-  //                 ...prev,
-  //                 location: address,
-  //               }));
-  //             } catch (error) {
-  //               alert("Could not get location: " + error.message);
-  //             }
-  //           }}
-  //         >
-  //           {" "}
-  //           <Icon name="location-outline" size={400} />
-  //         </TouchableOpacity>
-  //         {formData.location !== "" && (
-  //           <View>
-  //             <Text>Location Pinned:</Text>
-  //             <Text>{formData.location}</Text>
-  //           </View>
-  //         )}
-  //       </View>
-  //     ),
-  //   },
-  //   {
-  //     // label: "Step 5",
-  //     content: (
-  //       <View style={styles.stepContent}>
-  //         <Text style={styles.heading}>Payment</Text>
-  //         <Text>What form of payments do you accept?</Text>
-  //         <CheckBox
-  //           options={[
-  //             { label: "Cash", value: "Cash" },
-  //             { label: "Credit", value: "Credit / Debit Card" },
-  //             { label: "FirstPay", value: "1st Pay" },
-  //             { label: "CIBC", value: "CIBC Transfer" },
-  //           ]}
-  //           checkedValues={formData.payment_method}
-  //           onChange={(updatedArray) =>
-  //             setFormData((prev) => ({ ...prev, payment_method: updatedArray }))
-  //           }
-  //         />
-  //       </View>
-  //     ),
-  //   },
-  //   {
-  //     label: "Step 6",
-  //     content: (
-  //       <View style={styles.stepContent}>
-  //         <Text style={styles.heading}>Ordering</Text>
-  //         <Text>How do patrons order?</Text>
-  //         <TextInput
-  //           style={styles.orderInput}
-  //           value={formData.order_intstructions}
-  //           onChangeText={(text) =>
-  //             setFormData((prev) => ({ ...prev, order_intstructions: text }))
-  //           }
-  //         />
-  //       </View>
-  //     ),
-  //   },
-  //   {
-  //     // label: "Step 7",
-  //     content: (
-  //       <View style={styles.stepContent}>
-  //         <Text style={styles.heading}>Cuisine</Text>
-  //         <CheckBox
-  //           options={[
-  //             { label: "Traditional Bajan", value: "Traditional Bajan" },
-  //             { label: "Caribbean", value: "Caribbean" },
-  //             { label: "Seafood", value: "Seafood" },
-  //             { label: "International", value: "International" },
-  //             { label: "Fusion", value: "Fusion" },
-  //             { label: "Vegan/Vegetarian", value: "Vegan/Vegetarian" },
-  //             { label: "Sweets and Treats", value: "Sweets and Treats" },
-  //             { label: "Drinks", value: "Drinks" },
-  //           ]}
-  //           checkedValues={formData.cuisine_type}
-  //           onChange={(updatedArray) =>
-  //             setFormData((prev) => ({ ...prev, cuisine_type: updatedArray }))
-  //           }
-  //         />
-  //       </View>
-  //     ),
-  //   },
-  // ];
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -445,86 +202,9 @@ const styles = StyleSheet.create({
   progressContainer: {
     flex: 1,
   },
-  heading: {
-    textAlign: "center",
-    fontSize: 36.41,
-    padding: 20,
-  },
-
-  stepContent: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  socialSection: {
-    justifyContent: "center",
-    paddingLeft: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "black",
-    padding: 10,
-    width: "98%",
-    height: 50,
-    borderRadius: 5,
-    marginVertical: 0,
-    marginTop: 150,
-  },
-  icon: {
-    padding: 10,
-    margin: 5,
-    height: 25,
-    width: 25,
-    resizeMode: "stretch",
-    alignItems: "center",
-  },
-  businessInput: {
-    borderWidth: 1,
-    borderColor: "black",
-    padding: 10,
-    width: "98%",
-    height: 50,
-    borderRadius: 5,
-    marginVertical: 0,
-    marginBottom: 25,
-    marginTop: 10,
-    marginLeft: 5,
-  },
-  socialInput: {
-    flex: 1,
-  },
-  orderInput: {
-    borderWidth: 1,
-    borderColor: "black",
-    height: 100,
-    padding: 10,
-    width: "98%",
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  details: {
-    marginTop: 50,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    width: "98%",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-  },
-  socialMedia: {},
   backButton: {
     left: 10,
     bottom: 680,
-  },
-  inputLabel: {
-    paddingTop: 5,
-    marginBottom: 5,
   },
 });
 
