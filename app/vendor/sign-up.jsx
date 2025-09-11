@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
-import { CheckBox } from "../../components/CheckBox";
-import Icon from "react-native-vector-icons/Ionicons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useAppDispatch } from "@/./store/store";
+// import { CheckBox } from "../../components/CheckBox";
+// import Icon from "react-native-vector-icons/Ionicons";
 import { setVendorId } from "@/store/vendorSlice";
 import { Button } from "../../components/Button";
 import { BackButton } from "../../components/BackButton";
-import {
-  getCurrentLocation,
-  reverseGeocodeWithNominatim,
-} from "@/services/location";
+import { StepBusinessName } from "../../components/steps/StepBusinessName";
+import { StepBusinessHours } from "../../components/steps/StepBusinessHours";
+import { StepBusinessAddress } from "../../components/steps/StepBusinessAddress";
+import { StepCuisine } from "../../components/steps/StepCuisine";
+import { StepOrderingInstruction } from "../../components/steps/StepOrderingInstruction";
+import { StepPaymentMethods } from "../../components/steps/StepPaymentMethods";
+import { StepPhoneNumber } from "../../components/steps/StepPhoneNumber";
+import { StepSocialMedia } from "../../components/steps/StepSocialMedia";
+import FormData from "../../types/FormData";
+// import {
+//   getCurrentLocation,
+//   reverseGeocodeWithNominatim,
+// } from "@/services/location";
 import {
   Text,
   View,
@@ -22,8 +29,11 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
+console.log("StepBusinessName:", StepBusinessName);
+
 const VendorSignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  // const [formData, setFormData] = useState<FormData>
   const [formData, setFormData] = useState({
     business_name: "",
     phone_number: "",
@@ -44,26 +54,26 @@ const VendorSignUp = () => {
     cuisine_type: [],
   });
 
-  const formatPhoneNumber = (text) => {
-    const cleaned = text.replace(/\D/g, "");
-    const length = cleaned.length;
+  // const formatPhoneNumber = (text) => {
+  //   const cleaned = text.replace(/\D/g, "");
+  //   const length = cleaned.length;
 
-    if (length < 4) return cleaned;
-    if (length < 7) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
-    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
-      6,
-      10
-    )}`;
-  };
+  //   if (length < 4) return cleaned;
+  //   if (length < 7) return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+  //   return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
+  //     6,
+  //     10
+  //   )}`;
+  // };
 
-  const handlePhoneNumberFormat = (text) => {
-    const formatted = formatPhoneNumber(text);
-    setFormData((prev) => ({ ...prev, phone_number: formatted }));
-  };
+  // const handlePhoneNumberFormat = (text) => {
+  //   const formatted = formatPhoneNumber(text);
+  //   setFormData((prev) => ({ ...prev, phone_number: formatted }));
+  // };
 
   const handleSubmit = async () => {
     console.log("Submitting data:", formData);
-    if (!validaetAll()) {
+    if (!validateAll()) {
       alert("Please complete all the required fields before submitting");
     }
 
@@ -108,7 +118,7 @@ const VendorSignUp = () => {
     if (currentStep === 0) {
       router.push("/");
     } else {
-      let previousStep = currentStep - 1;
+      setCurrentStep(currentStep - 1);
     }
   };
 
@@ -140,7 +150,7 @@ const VendorSignUp = () => {
     }
   };
 
-  const validaetAll = () => {
+  const validateAll = () => {
     for (let i = 0; i < steps.length; i++) {
       if (!validateStep(i)) {
         return false;
@@ -151,212 +161,262 @@ const VendorSignUp = () => {
 
   const steps = [
     {
-      // label: "Step 1",
+      label: "Business Name",
       content: (
-        <View style={styles.stepContent}>
-          <Text style={styles.heading}>Business Name</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Name of Business"
-            value={formData.business_name}
-            onChangeText={(text) =>
-              setFormData((prev) => ({ ...prev, business_name: text }))
-            }
-          />
-        </View>
+        <StepBusinessName formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      // label: "Step 2",
+      label: "Phone Number",
       content: (
-        <TouchableWithoutFeedback>
-          <View style={styles.stepContent}>
-            <Text style={styles.heading}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Phone Number"
-              keyboardType="phone-pad"
-              value={formData.phone_number}
-              onChangeText={handlePhoneNumberFormat}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      ),
-    },
-
-    {
-      // label: "Step 3",
-      content: (
-        <ScrollView>
-          <View>
-            <Text style={styles.heading}>Business Hours</Text>
-            {Object.keys(formData.business_hours).map((day) => (
-              <View key={day}>
-                <Text>{day}:</Text>
-                <TextInput
-                  key={day}
-                  style={styles.businessInput}
-                  placeholder={`${day} Hours`}
-                  value={formData.business_hours[day]}
-                  onChangeText={(text) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      business_hours: {
-                        ...prev.business_hours,
-                        [day]: text,
-                      },
-                    }))
-                  }
-                />
-              </View>
-            ))}
-          </View>
-        </ScrollView>
+        <StepPhoneNumber formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      // label: "Skipped Step",
+      label: "Business Hours",
       content: (
-        <View style={styles.socialSection}>
-          <Text style={styles.heading}>Social Media</Text>
-          <Text style={styles.inputLabel}>Instagram Handle:</Text>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.icon} name="logo-instagram" />
-            <Text style={styles.staticPrefix}>www.instagram.com/</Text>
-            <TextInput
-              style={styles.socialInput}
-              value={formData.instagram_url}
-              onChangeText={(text) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  instagram_url: text.toLowerCase(),
-                }))
-              }
-              placeholder="yourhandle"
-            />
-          </View>
-          <Text style={styles.inputLabel}>Facebook:</Text>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.icon} name="logo-facebook" />
-            <Text style={styles.staticPrefix}>www.facebook.com/</Text>
-            <TextInput
-              style={styles.socialInput}
-              value={formData.facebook_url}
-              onChangeText={(text) =>
-                setFormData((prev) => ({ ...prev, facebook_url: text }))
-              }
-              placeholder="username"
-            ></TextInput>
-          </View>
-        </View>
+        <StepBusinessHours formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      // label: "Skipped Step",
+      label: "Social Media",
       content: (
-        <View style={styles.stepContent}>
-          <Text style={styles.details}>Now, Let's add the details</Text>
-        </View>
+        <StepSocialMedia formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      // label: "Step 4",
+      label: "Business Address",
       content: (
-        <View style={styles.stepContent}>
-          <Text style={styles.heading}>Location</Text>
-          <Text style={styles.details}>Pin My Location</Text>
-          <TouchableOpacity
-            onPress={async () => {
-              try {
-                const coords = await getCurrentLocation();
-                const address = await reverseGeocodeWithNominatim(
-                  coords.latitude,
-                  coords.longitude
-                );
-
-                setFormData((prev) => ({
-                  ...prev,
-                  location: address,
-                }));
-              } catch (error) {
-                alert("Could not get location: " + error.message);
-              }
-            }}
-          >
-            {" "}
-            <Icon name="location-outline" size={400} />
-          </TouchableOpacity>
-          {formData.location !== "" && (
-            <View>
-              <Text>Location Pinned:</Text>
-              <Text>{formData.location}</Text>
-            </View>
-          )}
-        </View>
+        <StepBusinessAddress formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      // label: "Step 5",
+      label: "Payment Methods",
       content: (
-        <View style={styles.stepContent}>
-          <Text style={styles.heading}>Payment</Text>
-          <Text>What form of payments do you accept?</Text>
-          <CheckBox
-            options={[
-              { label: "Cash", value: "Cash" },
-              { label: "Credit", value: "Credit / Debit Card" },
-              { label: "FirstPay", value: "1st Pay" },
-              { label: "CIBC", value: "CIBC Transfer" },
-            ]}
-            checkedValues={formData.payment_method}
-            onChange={(updatedArray) =>
-              setFormData((prev) => ({ ...prev, payment_method: updatedArray }))
-            }
-          />
-        </View>
+        <StepPaymentMethods formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      // label: "Step 6",
+      label: "Ordering Instruction",
       content: (
-        <View style={styles.stepContent}>
-          <Text style={styles.heading}>Ordering</Text>
-          <Text>How do patrons order?</Text>
-          <TextInput
-            style={styles.orderInput}
-            value={formData.order_intstructions}
-            onChangeText={(text) =>
-              setFormData((prev) => ({ ...prev, order_intstructions: text }))
-            }
-          />
-        </View>
+        <StepOrderingInstruction
+          formData={formData}
+          setFormData={setFormData}
+        />
       ),
     },
     {
-      // label: "Step 7",
-      content: (
-        <View style={styles.stepContent}>
-          <Text style={styles.heading}>Cuisine</Text>
-          <CheckBox
-            options={[
-              { label: "Traditional Bajan", value: "Traditional Bajan" },
-              { label: "Caribbean", value: "Caribbean" },
-              { label: "Seafood", value: "Seafood" },
-              { label: "International", value: "International" },
-              { label: "Fusion", value: "Fusion" },
-              { label: "Vegan/Vegetarian", value: "Vegan/Vegetarian" },
-              { label: "Sweets and Treats", value: "Sweets and Treats" },
-              { label: "Drinks", value: "Drinks" },
-            ]}
-            checkedValues={formData.cuisine_type}
-            onChange={(updatedArray) =>
-              setFormData((prev) => ({ ...prev, cuisine_type: updatedArray }))
-            }
-          />
-        </View>
-      ),
+      label: "Cuisine",
+      content: <StepCuisine formData={formData} setFormData={setFormData} />,
     },
   ];
+  // const steps = [
+  //   {
+  //     // label: "Step 1",
+  //     content: (
+  //       <View style={styles.stepContent}>
+  //         <Text style={styles.heading}>Business Name</Text>
+  //         <TextInput
+  //           style={styles.input}
+  //           placeholder="Name of Business"
+  //           value={formData.business_name}
+  //           onChangeText={(text) =>
+  //             setFormData((prev) => ({ ...prev, business_name: text }))
+  //           }
+  //         />
+  //       </View>
+  //     ),
+  //   },
+  //   {
+  //     // label: "Step 2",
+  //     content: (
+  //       <TouchableWithoutFeedback>
+  //         <View style={styles.stepContent}>
+  //           <Text style={styles.heading}>Phone Number</Text>
+  //           <TextInput
+  //             style={styles.input}
+  //             placeholder="Phone Number"
+  //             keyboardType="phone-pad"
+  //             value={formData.phone_number}
+  //             onChangeText={handlePhoneNumberFormat}
+  //           />
+  //         </View>
+  //       </TouchableWithoutFeedback>
+  //     ),
+  //   },
+
+  //   {
+  //     // label: "Step 3",
+  //     content: (
+  //       <ScrollView>
+  //         <View>
+  //           <Text style={styles.heading}>Business Hours</Text>
+  //           {Object.keys(formData.business_hours).map((day) => (
+  //             <View key={day}>
+  //               <Text>{day}:</Text>
+  //               <TextInput
+  //                 key={day}
+  //                 style={styles.businessInput}
+  //                 placeholder={`${day} Hours`}
+  //                 value={formData.business_hours[day]}
+  //                 onChangeText={(text) =>
+  //                   setFormData((prev) => ({
+  //                     ...prev,
+  //                     business_hours: {
+  //                       ...prev.business_hours,
+  //                       [day]: text,
+  //                     },
+  //                   }))
+  //                 }
+  //               />
+  //             </View>
+  //           ))}
+  //         </View>
+  //       </ScrollView>
+  //     ),
+  //   },
+  //   {
+  //     // label: "Skipped Step",
+  //     content: (
+  //       <View style={styles.socialSection}>
+  //         <Text style={styles.heading}>Social Media</Text>
+  //         <Text style={styles.inputLabel}>Instagram Handle:</Text>
+  //         <View style={styles.inputContainer}>
+  //           <Icon style={styles.icon} name="logo-instagram" />
+  //           <Text style={styles.staticPrefix}>www.instagram.com/</Text>
+  //           <TextInput
+  //             style={styles.socialInput}
+  //             value={formData.instagram_url}
+  //             onChangeText={(text) =>
+  //               setFormData((prev) => ({
+  //                 ...prev,
+  //                 instagram_url: text.toLowerCase(),
+  //               }))
+  //             }
+  //             placeholder="yourhandle"
+  //           />
+  //         </View>
+  //         <Text style={styles.inputLabel}>Facebook:</Text>
+  //         <View style={styles.inputContainer}>
+  //           <Icon style={styles.icon} name="logo-facebook" />
+  //           <Text style={styles.staticPrefix}>www.facebook.com/</Text>
+  //           <TextInput
+  //             style={styles.socialInput}
+  //             value={formData.facebook_url}
+  //             onChangeText={(text) =>
+  //               setFormData((prev) => ({ ...prev, facebook_url: text }))
+  //             }
+  //             placeholder="username"
+  //           ></TextInput>
+  //         </View>
+  //       </View>
+  //     ),
+  //   },
+  //   {
+  //     // label: "Skipped Step",
+  //     content: (
+  //       <View style={styles.stepContent}>
+  //         <Text style={styles.details}>Now, Let's add the details</Text>
+  //       </View>
+  //     ),
+  //   },
+  //   {
+  //     label: "Step 4",
+  //     content: (
+  //       <View style={styles.stepContent}>
+  //         <Text style={styles.heading}>Location</Text>
+  //         <Text style={styles.details}>Pin My Location</Text>
+  //         <TouchableOpacity
+  //           onPress={async () => {
+  //             try {
+  //               const coords = await getCurrentLocation();
+  //               const address = await reverseGeocodeWithNominatim(
+  //                 coords.latitude,
+  //                 coords.longitude
+  //               );
+  //               setFormData((prev) => ({
+  //                 ...prev,
+  //                 location: address,
+  //               }));
+  //             } catch (error) {
+  //               alert("Could not get location: " + error.message);
+  //             }
+  //           }}
+  //         >
+  //           {" "}
+  //           <Icon name="location-outline" size={400} />
+  //         </TouchableOpacity>
+  //         {formData.location !== "" && (
+  //           <View>
+  //             <Text>Location Pinned:</Text>
+  //             <Text>{formData.location}</Text>
+  //           </View>
+  //         )}
+  //       </View>
+  //     ),
+  //   },
+  //   {
+  //     // label: "Step 5",
+  //     content: (
+  //       <View style={styles.stepContent}>
+  //         <Text style={styles.heading}>Payment</Text>
+  //         <Text>What form of payments do you accept?</Text>
+  //         <CheckBox
+  //           options={[
+  //             { label: "Cash", value: "Cash" },
+  //             { label: "Credit", value: "Credit / Debit Card" },
+  //             { label: "FirstPay", value: "1st Pay" },
+  //             { label: "CIBC", value: "CIBC Transfer" },
+  //           ]}
+  //           checkedValues={formData.payment_method}
+  //           onChange={(updatedArray) =>
+  //             setFormData((prev) => ({ ...prev, payment_method: updatedArray }))
+  //           }
+  //         />
+  //       </View>
+  //     ),
+  //   },
+  //   {
+  //     label: "Step 6",
+  //     content: (
+  //       <View style={styles.stepContent}>
+  //         <Text style={styles.heading}>Ordering</Text>
+  //         <Text>How do patrons order?</Text>
+  //         <TextInput
+  //           style={styles.orderInput}
+  //           value={formData.order_intstructions}
+  //           onChangeText={(text) =>
+  //             setFormData((prev) => ({ ...prev, order_intstructions: text }))
+  //           }
+  //         />
+  //       </View>
+  //     ),
+  //   },
+  //   {
+  //     // label: "Step 7",
+  //     content: (
+  //       <View style={styles.stepContent}>
+  //         <Text style={styles.heading}>Cuisine</Text>
+  //         <CheckBox
+  //           options={[
+  //             { label: "Traditional Bajan", value: "Traditional Bajan" },
+  //             { label: "Caribbean", value: "Caribbean" },
+  //             { label: "Seafood", value: "Seafood" },
+  //             { label: "International", value: "International" },
+  //             { label: "Fusion", value: "Fusion" },
+  //             { label: "Vegan/Vegetarian", value: "Vegan/Vegetarian" },
+  //             { label: "Sweets and Treats", value: "Sweets and Treats" },
+  //             { label: "Drinks", value: "Drinks" },
+  //           ]}
+  //           checkedValues={formData.cuisine_type}
+  //           onChange={(updatedArray) =>
+  //             setFormData((prev) => ({ ...prev, cuisine_type: updatedArray }))
+  //           }
+  //         />
+  //       </View>
+  //     ),
+  //   },
+  // ];
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

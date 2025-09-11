@@ -41,7 +41,6 @@ const VendorMenu = () => {
 
   return (
     <SafeAreaView>
-      <BackButton />
       <View>
         <Text>{title}</Text>
       </View>

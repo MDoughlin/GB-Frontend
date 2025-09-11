@@ -22,7 +22,6 @@ const VendorDashboard = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <BackButton route="/vendor/home" />
       <View style={styles.dashboardList}>
         {dashboardItems.map((item, index) => (
           <TouchableOpacity
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    marginTop: 40,
   },
   circle: {
     width: 90,

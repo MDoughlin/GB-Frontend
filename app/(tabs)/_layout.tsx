@@ -7,7 +7,7 @@ export default function TabsLayout() {
   return (
     <>
       <StatusBar style="auto" />
-      <Tabs screenOptions={{ headerShown: false }}>
+      <Tabs screenOptions={{}}>
         <Tabs.Screen
           name="index"
           options={{
@@ -29,7 +29,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="dashboard"
           options={{
-            title: "Account",
+            title: "Settings",
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="settings" color={color} size={size} />
             ),
