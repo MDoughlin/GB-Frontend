@@ -13,17 +13,38 @@ const VendorDashboard = () => {
   const router = useRouter();
   const { vendorId } = useLocalSearchParams();
 
-  const dashboardItems = [
+  const BusinessItems = [
     { label: "Business Information", path: "/vendor/businessInformation" },
-    { label: "Menu", path: "/vendor/menu" },
+    { label: "Menu Management", path: "/vendor/menu" },
     { label: "Customer Engagement", path: "/vendor/analytics" },
-    { label: "Account and Security", path: "/vendor/accountAndSecurityMenu" },
+    { label: "Reviews", path: "" },
+    { label: "Analytics", path: "" },
+  ];
+
+  const AccountItems = [
+    { label: "Account Settings", path: "/vendor/accountAndSecurityMenu" },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.dashboardList}>
-        {dashboardItems.map((item, index) => (
+        <Text style={styles.header}>Business</Text>
+        {BusinessItems.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() =>
+              router.push({
+                pathname: item.path as any,
+                params: { title: item.label, vendorId },
+              })
+            }
+            style={styles.dashboardItem}
+          >
+            <Text style={styles.dashboardText}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
+        <Text style={styles.header}>Account</Text>
+        {AccountItems.map((item, index) => (
           <TouchableOpacity
             key={index}
             onPress={() =>
@@ -66,7 +87,11 @@ const styles = StyleSheet.create({
   dashboardText: {
     fontSize: 16,
     textAlign: "left",
-    paddingLeft: 70,
+    paddingLeft: 20,
+  },
+  header: {
+    fontWeight: "bold",
+    marginBottom: 15,
   },
 });
 
