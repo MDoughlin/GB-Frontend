@@ -14,7 +14,7 @@ import {
 
 const VendorMenu = () => {
   const router = useRouter();
-  const { title } = useLocalSearchParams();
+  // const { title } = useLocalSearchParams();
   const vendorId = useSelector((state: any) => state.vendor.vendorId);
   const [menuItems, setMenuItems] = useState([]);
 
@@ -41,9 +41,7 @@ const VendorMenu = () => {
 
   return (
     <SafeAreaView>
-      <View>
-        <Text>{title}</Text>
-      </View>
+      <View>{/* <Text>{title}</Text> */}</View>
 
       <FlatList
         data={menuItems}
@@ -58,7 +56,7 @@ const VendorMenu = () => {
           </View>
         )}
         ListEmptyComponent={
-          <>
+          <View>
             <Text
               style={{ padding: 16, textAlign: "center", fontWeight: "bold" }}
             >
@@ -67,7 +65,7 @@ const VendorMenu = () => {
             <Text style={{ padding: 16, textAlign: "center" }}>
               Start adding items to your menu to showcase your delicious meals.
             </Text>
-          </>
+          </View>
         }
       />
       <Button

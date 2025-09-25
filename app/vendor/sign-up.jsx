@@ -8,7 +8,7 @@ import { StepBusinessHours } from "../../components/steps/StepBusinessHours";
 import { StepBusinessAddress } from "../../components/steps/StepBusinessAddress";
 import { StepCuisine } from "../../components/steps/StepCuisine";
 import { StepOrderingInstruction } from "../../components/steps/StepOrderingInstruction";
-import { StepPaymentMethods } from "../../components/steps/StepPaymentMethods";
+import { StepPaymentMethod } from "../../components/steps/StepPaymentMethod";
 import { StepPhoneNumber } from "../../components/steps/StepPhoneNumber";
 import { StepSocialMedia } from "../../components/steps/StepSocialMedia";
 import { Text, View, StyleSheet, SafeAreaView } from "react-native";
@@ -125,43 +125,43 @@ const VendorSignUp = () => {
 
   const steps = [
     {
-      label: "Business Name",
+      // label: "Business Name",
       content: (
         <StepBusinessName formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      label: "Phone Number",
+      // label: "Phone Number",
       content: (
         <StepPhoneNumber formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      label: "Business Hours",
+      // label: "Business Hours",
       content: (
         <StepBusinessHours formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      label: "Social Media",
+      // label: "Social Media",
       content: (
         <StepSocialMedia formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      label: "Business Address",
+      // label: "Business Address",
       content: (
         <StepBusinessAddress formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      label: "Payment Methods",
+      // label: "Payment Methods",
       content: (
-        <StepPaymentMethods formData={formData} setFormData={setFormData} />
+        <StepPaymentMethod formData={formData} setFormData={setFormData} />
       ),
     },
     {
-      label: "Ordering Instruction",
+      // label: "Ordering Instruction",
       content: (
         <StepOrderingInstruction
           formData={formData}
@@ -170,7 +170,7 @@ const VendorSignUp = () => {
       ),
     },
     {
-      label: "Cuisine",
+      // label: "Cuisine",
       content: <StepCuisine formData={formData} setFormData={setFormData} />,
     },
   ];

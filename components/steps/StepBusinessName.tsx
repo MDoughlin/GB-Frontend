@@ -33,10 +33,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "black",
     padding: 10,
-    width: "98%",
+    width: "95%",
     height: 50,
     borderRadius: 5,
     marginVertical: 0,
     marginTop: 150,
+    alignSelf: "center",
   },
 });
