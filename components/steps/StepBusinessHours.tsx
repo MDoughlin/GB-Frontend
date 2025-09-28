@@ -21,9 +21,24 @@ type BuinessHours = {
   [key in Weekday]: string;
 };
 
+// type Props = {
+//   formData: {
+//     business_hours: BuinessHours;
+//   };
+//   setFormData: React.Dispatch<React.SetStateAction<any>>;
+// };
+
 type Props = {
   formData: {
-    business_hours: BuinessHours;
+    business_hours: {
+      Sunday: string;
+      Monday: string;
+      Tuesday: string;
+      Wednesday: string;
+      Thursday: string;
+      Friday: string;
+      Saturday: string;
+    };
   };
   setFormData: React.Dispatch<React.SetStateAction<any>>;
 };
@@ -102,31 +117,6 @@ export function StepBusinessHours({ formData, setFormData }: Props) {
         </View>
       )}
     </ScrollView>
-    // <ScrollView>
-    //   <View>
-    //     <Text style={styles.heading}>Business Hours</Text>
-    //     {Object.keys(formData.business_hours).map((day) => (
-    //       <View key={day}>
-    //         <Text>{day}:</Text>
-    //         <TextInput
-    //           key={day}
-    //           style={styles.businessInput}
-    //           placeholder={`${day} Hours`}
-    //           value={formData.business_hours[day as Weekday]}
-    //           onChangeText={(text) =>
-    //             setFormData((prev: any) => ({
-    //               ...prev,
-    //               business_hours: {
-    //                 ...prev.business_hours,
-    //                 [day]: text,
-    //               },
-    //             }))
-    //           }
-    //         />
-    //       </View>
-    //     ))}
-    //   </View>
-    // </ScrollView>
   );
 }
 
