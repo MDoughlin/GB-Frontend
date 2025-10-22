@@ -1,15 +1,12 @@
 import { Tabs } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function TabsLayout() {
   return (
     <>
-      <StatusBar style="auto" />
       <Tabs screenOptions={{}}>
         <Tabs.Screen
-          name="index"
+          name="home"
           options={{
             title: "Home",
             tabBarIcon: ({ color, size }) => (
