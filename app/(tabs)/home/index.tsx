@@ -12,6 +12,7 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
+import { DrawerActions } from "@react-navigation/native";
 
 const VendorHomeScreen = () => {
   const router = useRouter();
@@ -40,7 +41,7 @@ const VendorHomeScreen = () => {
           setVendorData({ vendorId: item.id, name: item.business_name })
         );
         router.push({
-          pathname: `/vendor/dashboard`,
+          pathname: `../vendor/dashboard`,
           params: { vendorId: item.id },
         });
       }}
@@ -53,8 +54,11 @@ const VendorHomeScreen = () => {
     <>
       <Stack.Screen
         options={{
+          title: "Home",
           headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <TouchableOpacity
+              onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            >
               <MaterialCommunityIcons
                 name="menu"
                 size={26}
@@ -138,7 +142,7 @@ const styles = StyleSheet.create({
   addButton: {
     position: "absolute",
     right: 20,
-    botton: 30,
+    bottom: 30,
     borderRadius: 50,
   },
   addButtonTwo: {

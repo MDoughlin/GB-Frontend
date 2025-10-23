@@ -4,7 +4,7 @@ export default function HomeDrawerLayout() {
   return (
     <Drawer
       screenOptions={{
-        headerShown: false, // keeps your single header from index
+        headerShown: false,
         drawerPosition: "left",
       }}
     />
