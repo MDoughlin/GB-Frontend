@@ -1,4 +1,4 @@
-import { useRouter, useNavigation, Stack } from "expo-router";
+import { useRouter, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppDispatch } from "../../../store/hooks";
@@ -12,63 +12,46 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { DrawerActions } from "@react-navigation/native";
-
 const VendorHomeScreen = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const [vendors, setVendors] = useState([]);
 
-  useEffect(() => {
-    const fetchVendors = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/vendor/");
-        const data = await response.json();
-        setVendors(data);
-      } catch (error) {
-        console.error("Error fetching vendors", error);
-      }
-    };
-    fetchVendors();
-  }, []);
+  //this needs to move to the drawer
+  // useEffect(() => {
+  //   const fetchVendors = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:3000/vendor/");
+  //       const data = await response.json();
+  //       setVendors(data);
+  //     } catch (error) {
+  //       console.error("Error fetching vendors", error);
+  //     }
+  //   };
+  //   fetchVendors();
+  // }, []);
 
-  const renderVendor = ({ item }) => (
-    <TouchableOpacity
-      style={styles.circle}
-      onPress={() => {
-        dispatch(
-          setVendorData({ vendorId: item.id, name: item.business_name })
-        );
-        router.push({
-          pathname: `../vendor/dashboard`,
-          params: { vendorId: item.id },
-        });
-      }}
-    >
-      <Text style={styles.circleText}>{item.business_name.charAt(0)}</Text>
-    </TouchableOpacity>
-  );
+  // const renderVendor = ({ item }: { item: { id: string; business_name: string } }) => (
+  //   <TouchableOpacity
+  //     style={styles.circle}
+  //     onPress={() => {
+  //       dispatch(
+  //         setVendorData({ vendorId: item.id, name: item.business_name })
+  //       );
+  //       router.push({
+  //         pathname: `../vendor/dashboard`,
+  //         params: { vendorId: item.id },
+  //       });
+  //     }}
+  //   >
+  //     <Text style={styles.circleText}>{item.business_name.charAt(0)}</Text>
+  //   </TouchableOpacity>
+  // );
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: "Home",
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-            >
-              <MaterialCommunityIcons
-                name="menu"
-                size={26}
-                color="#000"
-                style={{ marginLeft: 10 }}
-              />
-            </TouchableOpacity>
-          ),
-        }}
-      />
+      {/* Remove Stack.Screen since header is handled by Drawer */}
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
           {vendors.length > 0 ? (

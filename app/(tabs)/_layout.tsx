@@ -6,12 +6,13 @@ export default function TabsLayout() {
     <>
       <Tabs screenOptions={{}}>
         <Tabs.Screen
-          name="home/index"
+          name="home"
           options={{
             title: "Home",
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="home" color={color} size={size} />
             ),
+            headerShown: false, // Hide tab header so drawer can show its own
           }}
         />
         <Tabs.Screen

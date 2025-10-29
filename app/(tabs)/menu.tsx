@@ -1,110 +1,156 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { setVendorData } from "@/store/vendorSlice";
-import { BackButton } from "../../components/BackButton";
+import { RootState } from "@/store/store";
+import { Button } from "@/components/Button";
 import {
   Text,
   SafeAreaView,
-  Button,
   View,
   StyleSheet,
   FlatList,
   Image,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
+
+interface MenuItem {
+  id: string;
+  item: string;
+  price: string;
+  imageUrl?: string;
+}
+
+// TODO: Move to environment configuration
+const API_BASE_URL = "http://10.0.0.167:3000";
 
 const VendorMenu = () => {
   const router = useRouter();
-  // const { title } = useLocalSearchParams();
-  const vendorId = useSelector((state: any) => state.vendor.vendorId);
-  const [menuItems, setMenuItems] = useState([
-    {
-      id: "1",
-      item: "Cheeseburger",
-      price: "8.99",
-      imageUrl:
-        "https://californiaavocado.com/wp-content/uploads/2021/03/Classic-Calif-Avocado-Cheeseburger-with-Carmelized-Onions-CAC-001-cropped-1014x676.jpg",
-    },
-    {
-      id: "2",
-      item: "Veggie Wrap",
-      price: "6.49",
-      imageUrl:
-        "https://www.superhealthykids.com/wp-content/uploads/2023/08/veggie-wrap-3.jpg",
-    },
-    {
-      id: "3",
-      item: "Chicken Tenders",
-      price: "9.25",
-      imageUrl: "https://example.com/chicken-tenders.jpg",
-    },
-  ]);
+  const vendorId = useSelector((state: RootState) => state.vendor.vendorId);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  console.log("Redux vendorId", vendorId);
+  const fetchMenuItems = useCallback(async () => {
+    if (!vendorId) {
+      setLoading(false);
+      return;
+    }
 
-  useEffect(() => {
-    console.log("Vendor ID", vendorId);
-    const fetchMenuItems = async () => {
-      try {
-        const response = await fetch(
-          `http://10.0.0.167:3000/menu/vendor/${vendorId}`
-        );
-        const data = await response.json();
-        console.log("Menu items from backend", data);
-        setMenuItems(data);
-      } catch (error) {
-        console.error("Error fetching menu", error);
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch(`${API_BASE_URL}/menu/vendor/${vendorId}`);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch menu: ${response.statusText}`);
       }
-    };
-    if (vendorId) {
-      fetchMenuItems();
+      
+      const data = await response.json();
+      setMenuItems(Array.isArray(data) ? data : []);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+      setError(errorMessage);
+      console.error("Error fetching menu:", errorMessage);
+    } finally {
+      setLoading(false);
     }
   }, [vendorId]);
 
-  return (
-    <SafeAreaView>
-      <View>{/* <Text>{title}</Text> */}</View>
+  useEffect(() => {
+    fetchMenuItems();
+  }, [fetchMenuItems]);
+
+  const handleRetry = () => {
+    fetchMenuItems();
+  };
+
+  const handleAddItem = () => {
+    if (!vendorId) {
+      Alert.alert("Error", "Vendor ID not found");
+      return;
+    }
+    router.push("/vendor/menu-item");
+  };
+
+  const renderMenuItem = useCallback(({ item }: { item: MenuItem }) => (
+    <View style={styles.menuItem}>
+      <Image
+        source={{ uri: item.imageUrl || "https://via.placeholder.com/60" }}
+        style={styles.image}
+        resizeMode="cover"
+        onError={() => console.warn(`Failed to load image for ${item.item}`)}
+      />
+      <View style={styles.textContainer}>
+        <Text style={styles.name}>{item.item}</Text>
+        <Text style={styles.price}>
+          ${parseFloat(item.price).toFixed(2)}
+        </Text>
+      </View>
+    </View>
+  ), []);
+
+  const renderEmptyState = useMemo(() => (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyTitle}>No Items yet</Text>
+      <Text style={styles.emptyMessage}>
+        Start adding items to your menu to showcase your delicious meals.
+      </Text>
+    </View>
+  ), []);
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color="#FBBC05" />
+          <Text style={styles.loadingText}>Loading menu...</Text>
+        </View>
+      );
+    }
+
+    if (error) {
+      return (
+        <View style={styles.centerContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+          <Button label="Retry" onPress={handleRetry} />
+        </View>
+      );
+    }
+
+    return (
       <FlatList
         data={menuItems}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16 }}
-        renderItem={({ item }) => (
-          <View style={styles.menuItem}>
-            <Image
-              source={{ uri: item.imageUrl }}
-              style={styles.image}
-              resizeMode="cover"
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.name}>{item.item}</Text>
-              <Text style={styles.price}>
-                ${parseFloat(item.price).toFixed(2)}
-              </Text>
-            </View>
-          </View>
-        )}
-        ListEmptyComponent={
-          <View>
-            <Text
-              style={{ padding: 16, textAlign: "center", fontWeight: "bold" }}
-            >
-              No Items yet
-            </Text>
-            <Text style={{ padding: 16, textAlign: "center" }}>
-              Start adding items to your menu to showcase your delicious meals.
-            </Text>
-          </View>
-        }
+        contentContainerStyle={styles.listContainer}
+        renderItem={renderMenuItem}
+        ListEmptyComponent={renderEmptyState}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={10}
+        windowSize={5}
       />
-      <Button
-        title="Add Item"
-        onPress={() => router.push("/vendor/menu-item")}
-      />
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {renderContent()}
+      {!loading && !error && (
+        <View style={styles.buttonContainer}>
+          <Button label="Add Item" onPress={handleAddItem} />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  listContainer: {
+    padding: 16,
+  },
   menuItem: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -121,11 +167,49 @@ const styles = StyleSheet.create({
   },
   price: {
     marginTop: 2,
+    fontSize: 14,
+    color: "#666",
   },
   name: {
     fontWeight: "600",
     fontSize: 16,
     paddingTop: 3,
+  },
+  emptyContainer: {
+    padding: 32,
+    alignItems: "center",
+  },
+  emptyTitle: {
+    paddingBottom: 8,
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  emptyMessage: {
+    padding: 8,
+    textAlign: "center",
+    fontSize: 14,
+    color: "#666",
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: "#666",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#d32f2f",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    padding: 16,
   },
 });
 

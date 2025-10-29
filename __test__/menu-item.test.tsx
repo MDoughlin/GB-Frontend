@@ -84,11 +84,10 @@ describe("MenuItem Component", () => {
     );
 
     expect(getByText("Add Item")).toBeTruthy();
-    expect(getByText("Upload Image")).toBeTruthy();
+    expect(getByText("Upload Photo")).toBeTruthy();
     expect(getByPlaceholderText("Item Name")).toBeTruthy();
     expect(getByPlaceholderText("Price")).toBeTruthy();
-    expect(getByText("Category")).toBeTruthy();
-    expect(getByText("Add Item")).toBeTruthy();
+    expect(getByText("Cuisine Type")).toBeTruthy();
   });
 
   test("updates item name input", () => {
@@ -112,7 +111,7 @@ describe("MenuItem Component", () => {
   test("handles image upload", async () => {
     const { getByText } = renderWithProvider(<MenuItem />);
 
-    const uploadButton = getByText("Upload Image");
+    const uploadButton = getByText("Upload Photo");
     fireEvent.press(uploadButton);
 
     await waitFor(() => {
