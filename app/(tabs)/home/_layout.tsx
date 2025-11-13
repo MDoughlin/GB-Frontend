@@ -3,8 +3,11 @@
 import { Drawer } from "expo-router/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { useNavigation } from '@react-navigation/native';
-import { DrawerNavigationProp, DrawerContentScrollView } from '@react-navigation/drawer';
+import { useNavigation } from "@react-navigation/native";
+import {
+  DrawerNavigationProp,
+  DrawerContentScrollView,
+} from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 
@@ -24,19 +27,46 @@ function CustomDrawerContent() {
   const router = useRouter();
   const [vendors, setVendors] = useState<any[]>([]);
 
-
   //this needs to move to the drawer
+  // useEffect(() => {
+  //   const fetchVendors = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:3000/vendor/");
+  //       const data = await response.json();
+  //       setVendors(data || []);
+  //     } catch (error) {
+  //       console.error("Error fetching vendors", error);
+  //     }
+  //   };
+  //   fetchVendors();
+  // }, []);
+
   useEffect(() => {
-    const fetchVendors = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/vendor/");
-        const data = await response.json();
-        setVendors(data || []);
-      } catch (error) {
-        console.error("Error fetching vendors", error);
-      }
-    };
-    fetchVendors();
+    // ✅ Comment out fetch and use dummy vendors instead
+    const dummyVendors = [
+      {
+        id: "1",
+        business_name: "Sunset Grille",
+        owner: "Alicia King",
+        phone_number: "(246) 555-1234",
+        email: "sunsetgrille@example.com",
+      },
+      {
+        id: "2",
+        business_name: "Tropical Treats",
+        owner: "Marcus Best",
+        phone_number: "(246) 555-5678",
+        email: "tropicaltreats@example.com",
+      },
+      {
+        id: "3",
+        business_name: "Bajan Bites",
+        owner: "Naomi Foster",
+        phone_number: "(246) 555-9876",
+        email: "bajanbites@example.com",
+      },
+    ];
+    setVendors(dummyVendors);
   }, []);
 
   return (

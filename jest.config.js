@@ -3,7 +3,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testPathIgnorePatterns: ["/node_modules/", "/android/", "/ios/"],
   transformIgnorePatterns: [
-    "node_modules/(?!(react-native|@react-native|expo-.*|@expo/.*|@react-navigation/.*)/)",
+    "node_modules/(?!(react-native|@react-native|react-native-dropdown-select-list|expo-.*|@expo/.*|@react-navigation/.*)/)",
   ],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   transform: {
