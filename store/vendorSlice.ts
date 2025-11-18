@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface VendorState {
   vendorId: string | null;
   name: string;
+  menu: string[];
 }
 
 const initialState: VendorState = {
   vendorId: null,
   name: "",
+  menu: [],
 };
 
 const VendorSlice = createSlice({
@@ -16,10 +18,15 @@ const VendorSlice = createSlice({
   reducers: {
     setVendorData: (
       state,
-      action: PayloadAction<{ vendorId: string; name: string }>
+      action: PayloadAction<{
+        menu: string[];
+        vendorId: string;
+        name: string;
+      }>
     ) => {
       state.vendorId = action.payload.vendorId;
       state.name = action.payload.name;
+      state.menu = action.payload.menu;
     },
     clearVendor: () => initialState,
   },

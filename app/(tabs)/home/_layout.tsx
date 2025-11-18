@@ -4,12 +4,14 @@ import { Drawer } from "expo-router/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { setVendorData } from "@/store/vendorSlice";
 import {
   DrawerNavigationProp,
   DrawerContentScrollView,
 } from "@react-navigation/drawer";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 function CustomHeader() {
   const navigation = useNavigation<DrawerNavigationProp<any>>();
@@ -25,6 +27,7 @@ function CustomHeader() {
 
 function CustomDrawerContent() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [vendors, setVendors] = useState<any[]>([]);
 
   //this needs to move to the drawer
@@ -76,13 +79,17 @@ function CustomDrawerContent() {
       {vendors.map((vendor) => (
         <TouchableOpacity
           key={vendor.id}
-          onPress={() =>
-            router.push({
-              pathname: "/vendor/dashboard",
-              params: { vendorId: vendor.id },
-            } as any)
-          }
-          style={styles.drawerItem}
+          onPress={() => {
+            dispatch(
+              setVendorData({
+                vendorId: vendor.id,
+                name: vendor.business_name,
+                menu: vendor.menu_items ?? [],
+              })
+            );
+
+            router.push("/vendor/vendorDisplay");
+          }}
         >
           <Text style={styles.drawerText}>{vendor.business_name}</Text>
         </TouchableOpacity>

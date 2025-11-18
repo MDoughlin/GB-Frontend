@@ -41,15 +41,16 @@ const VendorMenu = () => {
       setLoading(true);
       setError(null);
       const response = await fetch(`${API_BASE_URL}/menu/vendor/${vendorId}`);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch menu: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
       setMenuItems(Array.isArray(data) ? data : []);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+      const errorMessage =
+        err instanceof Error ? err.message : "An unknown error occurred";
       setError(errorMessage);
       console.error("Error fetching menu:", errorMessage);
     } finally {
@@ -65,39 +66,43 @@ const VendorMenu = () => {
     fetchMenuItems();
   };
 
-  const handleAddItem = () => {
-    if (!vendorId) {
-      Alert.alert("Error", "Vendor ID not found");
-      return;
-    }
-    router.push("/vendor/menu-item");
-  };
+  // const handleAddItem = () => {
+  //   if (!vendorId) {
+  //     Alert.alert("Error", "Vendor ID not found");
+  //     return;
+  //   }
+  //   router.push("/vendor/menu-item");
+  // };
 
-  const renderMenuItem = useCallback(({ item }: { item: MenuItem }) => (
-    <View style={styles.menuItem}>
-      <Image
-        source={{ uri: item.imageUrl || "https://via.placeholder.com/60" }}
-        style={styles.image}
-        resizeMode="cover"
-        onError={() => console.warn(`Failed to load image for ${item.item}`)}
-      />
-      <View style={styles.textContainer}>
-        <Text style={styles.name}>{item.item}</Text>
-        <Text style={styles.price}>
-          ${parseFloat(item.price).toFixed(2)}
+  const renderMenuItem = useCallback(
+    ({ item }: { item: MenuItem }) => (
+      <View style={styles.menuItem}>
+        <Image
+          source={{ uri: item.imageUrl || "https://via.placeholder.com/60" }}
+          style={styles.image}
+          resizeMode="cover"
+          onError={() => console.warn(`Failed to load image for ${item.item}`)}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.name}>{item.item}</Text>
+          <Text style={styles.price}>${parseFloat(item.price).toFixed(2)}</Text>
+        </View>
+      </View>
+    ),
+    []
+  );
+
+  const renderEmptyState = useMemo(
+    () => (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyTitle}>No Items yet</Text>
+        <Text style={styles.emptyMessage}>
+          Start adding items to your menu to showcase your delicious meals.
         </Text>
       </View>
-    </View>
-  ), []);
-
-  const renderEmptyState = useMemo(() => (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyTitle}>No Items yet</Text>
-      <Text style={styles.emptyMessage}>
-        Start adding items to your menu to showcase your delicious meals.
-      </Text>
-    </View>
-  ), []);
+    ),
+    []
+  );
 
   const renderContent = () => {
     if (loading) {
@@ -137,7 +142,7 @@ const VendorMenu = () => {
       {renderContent()}
       {!loading && !error && (
         <View style={styles.buttonContainer}>
-          <Button label="Add Item" onPress={handleAddItem} />
+          <Button label="Add Item" navigateTo="/vendor/menu-item" />
         </View>
       )}
     </SafeAreaView>

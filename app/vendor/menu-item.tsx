@@ -39,7 +39,7 @@ const CUISINE_OPTIONS: CuisineOption[] = [
 const MenuItem = () => {
   const router = useRouter();
   const vendorId = useSelector((state: RootState) => state.vendor.vendorId);
-  
+
   const [image, setImage] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [formData, setFormdata] = useState<FormData>({
@@ -84,12 +84,12 @@ const MenuItem = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Server error: ${errorText}`);
       }
-      
+
       alert("Menu item added successfully!");
       router.back();
     } catch (error) {
@@ -109,7 +109,7 @@ const MenuItem = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <BackButton route="/vendor/menu" />
+      <BackButton style={styles.backButton} route="/vendor/menu" />
       <Text style={styles.heading}>Add Item</Text>
       {/* {image && <Image source={{ uri: image }} style={styles.image} />} */}
       <TextInput
@@ -135,7 +135,7 @@ const MenuItem = () => {
       />
       <TouchableOpacity onPress={uploadImage} style={styles.photoBox}>
         <Text style={styles.boxText}>Upload Photo</Text>
-        <Text>
+        <Text style={styles.boxText}>
           Add a photo of your dish to make it more {"\n"} appealing to customers
         </Text>
       </TouchableOpacity>
@@ -151,6 +151,10 @@ const MenuItem = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+  },
+  backButton: {
+    marginTop: 10,
+    right: 160,
   },
   heading: {
     marginTop: 12,
@@ -185,6 +189,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 20,
   },
   boxText: {
     fontWeight: "bold",
