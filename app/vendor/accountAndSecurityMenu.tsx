@@ -1,4 +1,4 @@
-import { BackButton } from "@/components/Button";
+import { BackButton } from "@/components/BackButton";
 import { useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { setVendorId } from "@/store/vendorSlice";
-import { Button } from "../../components/Button";
+import { ActionButton } from "../../components/ActionButton";
 import { BackButton } from "../../components/BackButton";
 import { StepBusinessName } from "../../components/steps/StepBusinessName";
 import { StepBusinessHours } from "../../components/steps/StepBusinessHours";
@@ -189,7 +189,7 @@ const VendorSignUp = () => {
             currentStep === 0 && styles.disabledButton,
           ]}
         />
-        <Button
+        <ActionButton
           label={currentStep === steps.length - 1 ? "DONE" : "CONTINUE"}
           onPress={handleNext}
         />

@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { BackButton } from "@/components/BackButton";
-import { Button } from "@/components/Button";
+import { ActionButton } from "@/components/ActionButton";
 import { MultiSelectDropdown } from "@/components/MultiSelectDropdown";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
@@ -139,7 +139,7 @@ const MenuItem = () => {
           Add a photo of your dish to make it more {"\n"} appealing to customers
         </Text>
       </TouchableOpacity>
-      <Button
+      <ActionButton
         label="Add item"
         onPress={handleSubmit}
         style={{ minWidth: 350 }}

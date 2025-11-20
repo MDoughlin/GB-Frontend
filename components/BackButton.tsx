@@ -12,8 +12,8 @@ export function BackButton({ route = "/", onPress, style }: Props) {
   const router = useRouter();
 
   const handleRoute = () => {
-    if (onPress) {
-      onPress();
+    if (router.canGoBack()) {
+      router.back();
     } else {
       router.push("/");
     }

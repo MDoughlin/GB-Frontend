@@ -1,5 +1,5 @@
 import { useAppDispatch } from "../../../store/hooks";
-import { Button } from "../../../components/Button";
+import { ActionButton } from "../../../components/ActionButton";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 
 const VendorHomeScreen = () => {
@@ -9,7 +9,7 @@ const VendorHomeScreen = () => {
         <View style={styles.container}>
           <View style={styles.avatar} />
           <Text style={styles.name}>Chester Heels</Text>
-          <Button
+          <ActionButton
             label="Add Your First Business"
             navigateTo="/vendor/sign-up"
             style={{}}

@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { Button } from "@/components/Button";
+import { ActionButton } from "@/components/ActionButton";
 import {
   Text,
   SafeAreaView,
@@ -118,7 +118,7 @@ const VendorMenu = () => {
       return (
         <View style={styles.centerContainer}>
           <Text style={styles.errorText}>{error}</Text>
-          <Button label="Retry" onPress={handleRetry} />
+          <ActionButton label="Retry" onPress={handleRetry} />
         </View>
       );
     }
@@ -142,7 +142,7 @@ const VendorMenu = () => {
       {renderContent()}
       {!loading && !error && (
         <View style={styles.buttonContainer}>
-          <Button label="Add Item" navigateTo="/vendor/menu-item" />
+          <ActionButton label="Add Item" navigateTo="/vendor/menu-item" />
         </View>
       )}
     </SafeAreaView>

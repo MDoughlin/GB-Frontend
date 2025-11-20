@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { BackButton } from "@/components/Button";
+import { BackButton } from "@/components/BackButton";
 import {
   SafeAreaView,
   Text,

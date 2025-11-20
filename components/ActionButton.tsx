@@ -21,7 +21,7 @@ type Props = {
   textStyle?: TextStyle;
 };
 
-export function Button({
+export function ActionButton({
   label,
   onPress,
   navigateTo,
