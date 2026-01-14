@@ -50,7 +50,14 @@ const VendorDisplay = () => {
       <View>
         <Text style={styles.mainHeading}>{name} Dashboard</Text>
       </View>
-      <Text style={styles.heading}>Quick Actions</Text>
+      <View>
+        {/* placeholder for vendor image */}
+        <Image
+          style={styles.vendorImage}
+          source={require("@/assets/images/spacesaver.png")}
+        />
+      </View>
+      <Text style={styles.quickActions}>Quick Actions</Text>
       <View style={styles.buttons}>
         <ActionButton label={"Edit Business Info"} />
         <ActionButton label={"Add Menu Item"} navigateTo="vendor/menu-item" />
@@ -100,8 +107,19 @@ const styles = StyleSheet.create({
   mainHeading: {
     textAlign: "center",
     marginTop: 10,
+    fontWeight: "bold",
   },
   menuItem: {
     fontWeight: 600,
+  },
+  vendorImage: {
+    marginTop: 15,
+    height: 200,
+  },
+  quickActions: {
+    marginTop: 25,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
 });
