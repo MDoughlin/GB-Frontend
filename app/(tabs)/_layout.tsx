@@ -33,6 +33,13 @@ export default function TabsLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="vendor/vendorDisplay"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
       </Tabs>
     </>
   );

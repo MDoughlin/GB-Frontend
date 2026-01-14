@@ -1,5 +1,3 @@
-// polyfills are loaded from the app entry; avoid loading here to preserve init order
-
 import { Drawer } from "expo-router/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
@@ -7,14 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { setVendorData } from "@/store/vendorSlice";
-import {
-  DrawerNavigationProp,
-  DrawerContentScrollView,
-} from "@react-navigation/drawer";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { useDispatch } from "react-redux";
 
 function CustomHeader() {
-  const navigation = useNavigation<DrawerNavigationProp<any>>();
+  const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => navigation.openDrawer()}
@@ -25,12 +20,61 @@ function CustomHeader() {
   );
 }
 
-function CustomDrawerContent() {
+function CustomDrawerContent({ vendors }) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [vendors, setVendors] = useState<any[]>([]);
 
-  //this needs to move to the drawer
+  return (
+    <DrawerContentScrollView style={{ paddingTop: 60 }}>
+      <Text style={styles.drawerTitle}>Your Businesses</Text>
+
+      {vendors.map((vendor) => (
+        <TouchableOpacity
+          key={vendor.id}
+          onPress={() => {
+            dispatch(
+              setVendorData({
+                vendorId: vendor.id,
+                name: vendor.business_name,
+                menu: vendor.menu_items ?? [],
+              })
+            );
+
+            router.push("/vendor/vendorDisplay");
+          }}
+        >
+          <Text style={styles.drawerText}>{vendor.business_name}</Text>
+        </TouchableOpacity>
+      ))}
+
+      <TouchableOpacity
+        style={[styles.drawerItem, { marginTop: 15 }]}
+        onPress={() => router.push("/vendor/sign-up")}
+      >
+        <MaterialCommunityIcons
+          name="plus-circle-outline"
+          size={22}
+          color="#2E6CF6"
+        />
+        <Text
+          style={{
+            color: "#2E6CF6",
+            fontSize: 16,
+            marginLeft: 8,
+            fontWeight: "600",
+          }}
+        >
+          Add New Business
+        </Text>
+      </TouchableOpacity>
+    </DrawerContentScrollView>
+  );
+}
+
+export default function HomeDrawerLayout() {
+  const [vendors, setVendors] = useState([]);
+
+  // 🔥 vendor fetch belongs HERE
   // useEffect(() => {
   //   const fetchVendors = async () => {
   //     try {
@@ -41,6 +85,7 @@ function CustomDrawerContent() {
   //       console.error("Error fetching vendors", error);
   //     }
   //   };
+
   //   fetchVendors();
   // }, []);
 
@@ -73,54 +118,6 @@ function CustomDrawerContent() {
   }, []);
 
   return (
-    <DrawerContentScrollView style={{ paddingTop: 60 }}>
-      <Text style={styles.drawerTitle}>Your Businesses</Text>
-
-      {vendors.map((vendor) => (
-        <TouchableOpacity
-          key={vendor.id}
-          onPress={() => {
-            dispatch(
-              setVendorData({
-                vendorId: vendor.id,
-                name: vendor.business_name,
-                menu: vendor.menu_items ?? [],
-              })
-            );
-
-            router.push("/vendor/vendorDisplay");
-          }}
-        >
-          <Text style={styles.drawerText}>{vendor.business_name}</Text>
-        </TouchableOpacity>
-      ))}
-
-      <TouchableOpacity
-        style={[styles.drawerItem, { marginTop: 15 }]}
-        onPress={() => router.push("/vendor/sign-up" as any)}
-      >
-        <MaterialCommunityIcons
-          name="plus-circle-outline"
-          size={22}
-          color="#2E6CF6"
-        />
-        <Text
-          style={{
-            color: "#2E6CF6",
-            fontSize: 16,
-            marginLeft: 8,
-            fontWeight: "600",
-          }}
-        >
-          Add New Business
-        </Text>
-      </TouchableOpacity>
-    </DrawerContentScrollView>
-  );
-}
-
-export default function HomeDrawerLayout() {
-  return (
     <Drawer
       screenOptions={{
         headerShown: true,
@@ -129,9 +126,13 @@ export default function HomeDrawerLayout() {
         drawerPosition: "left",
         swipeEnabled: true,
       }}
-      drawerContent={(props) => <CustomDrawerContent />}
+      drawerContent={() => <CustomDrawerContent vendors={vendors} />}
     >
-      <Drawer.Screen name="index" />
+      {/* 👇 Pass vendors to the Home screen as params */}
+      <Drawer.Screen
+        name="index"
+        initialParams={{ vendors: JSON.stringify(vendors) }}
+      />
     </Drawer>
   );
 }

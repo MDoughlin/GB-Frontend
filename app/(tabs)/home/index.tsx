@@ -1,4 +1,3 @@
-import { useAppDispatch } from "../../../store/hooks";
 import { ActionButton } from "../../../components/ActionButton";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 
